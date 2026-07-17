@@ -12,10 +12,10 @@
     --accent: #0078d4; --accent-hover: #006cbe;
     --green-bg: #e8f5e9; --green-text: #2e7d32;
     --amber-bg: #fff8e1; --amber-text: #e65100;
-    --red-bg: #fdecea;   --red-text: #c62828;
-    --blue-bg: #e3f2fd;  --blue-text: #1565c0;
+    --red-bg: #fdecea; --red-text: #c62828;
+    --blue-bg: #e3f2fd; --blue-text: #1565c0;
     --purple-bg: #f3e5f5; --purple-text: #6a1b9a;
-    --teal-bg: #e0f2f1;   --teal-text: #00695c;
+    --teal-bg: #e0f2f1; --teal-text: #00695c;
     --r: 6px; --rl: 10px;
   }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
@@ -39,20 +39,20 @@
   .nav-btn.active { background: var(--blue-bg); color: var(--blue-text); font-weight: 500; }
   .content { flex: 1; padding: 24px; max-width: 900px; }
 
-  /* auth overlay */
-  #auth-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 200; }
-  .auth-card { background: var(--surface); border-radius: var(--rl); padding: 32px; width: 380px; text-align: center; }
-  .auth-card h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-  .auth-card p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+  /* setup required overlay */
+  #setup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 200; }
+  .setup-card { background: var(--surface); border-radius: var(--rl); padding: 32px; width: 420px; text-align: center; }
+  .setup-card h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .setup-card p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; line-height: 1.6; }
 
-  /* modals */
+  /* camera modal */
   .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.65); display: none; align-items: center; justify-content: center; z-index: 300; }
   .modal-backdrop.open { display: flex; }
   .modal-box { background: #000; border-radius: var(--rl); overflow: hidden; width: min(92vw, 460px); position: relative; }
   #cam-video { width: 100%; display: block; max-height: 60vh; object-fit: cover; }
   .cam-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
   .cam-reticle { width: 200px; height: 200px; border: 2px solid rgba(255,255,255,.85); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,.35); }
-  .cam-hint { color: #fff; font-size: 13px; margin-top: 14px; opacity: .9; text-align: center; padding: 0 16px; }
+  .cam-hint { color: #fff; font-size: 13px; margin-top: 14px; opacity: .9; }
   .modal-toolbar { background: #111; padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
   .modal-fb { flex: 1; font-size: 13px; color: #fff; opacity: .8; }
   .modal-close { background: none; border: 1px solid rgba(255,255,255,.3); color: #fff; border-radius: var(--r); padding: 6px 14px; font-size: 13px; cursor: pointer; }
@@ -61,7 +61,7 @@
   #nfc-modal .modal-box { background: var(--surface); }
   .nfc-body { padding: 32px 24px; text-align: center; }
   .nfc-pulse { width: 80px; height: 80px; border-radius: 50%; background: var(--teal-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; animation: pulse 1.5s ease-in-out infinite; }
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,105,92,.4); } 50% { box-shadow: 0 0 0 18px rgba(0,105,92,0); } }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,105,92,.4)}50%{box-shadow:0 0 0 18px rgba(0,105,92,0)} }
   .nfc-body h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
   .nfc-body p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
   #nfc-feedback { font-size: 13px; color: var(--teal-text); min-height: 20px; margin-bottom: 12px; }
@@ -71,16 +71,6 @@
   /* cards */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 20px; margin-bottom: 16px; }
   .card-title { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 14px; }
-
-  /* scan method tabs */
-  .method-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
-  .method-btn { display: flex; align-items: center; gap: 6px; padding: 6px 13px; border-radius: 99px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-muted); font-size: 12px; font-family: inherit; cursor: pointer; font-weight: 500; transition: all .15s; }
-  .method-btn:hover { background: var(--bg); }
-  .method-btn.active { border-color: var(--accent); background: var(--blue-bg); color: var(--blue-text); }
-  .method-btn.nfc-btn.active { border-color: #00897b; background: var(--teal-bg); color: var(--teal-text); }
-  .method-btn.cam-btn.active { border-color: var(--purple-text); background: var(--purple-bg); color: var(--purple-text); }
-  .method-btn.disabled { opacity: .4; cursor: not-allowed; }
-  .method-tag { font-size: 10px; padding: 1px 5px; border-radius: 99px; background: rgba(0,0,0,.08); margin-left: 2px; }
 
   /* stats */
   .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 16px; }
@@ -97,11 +87,9 @@
   .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
   .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
   .btn-danger { background: var(--red-bg); border-color: #ef9a9a; color: var(--red-text); }
-  .btn-danger:hover { background: #ffcdd2; }
   .btn-teal { background: var(--teal-bg); border-color: #80cbc4; color: var(--teal-text); }
   .btn-purple { background: var(--purple-bg); border-color: #ce93d8; color: var(--purple-text); }
   .btn-sm { height: 28px; padding: 0 10px; font-size: 12px; }
-  .btn[disabled], .btn.disabled { opacity: .45; cursor: not-allowed; pointer-events: none; }
 
   /* forms */
   label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
@@ -119,21 +107,28 @@
   .mode-btn.active.in  { background: var(--green-bg); color: var(--green-text); border-color: #a5d6a7; }
   .mode-btn.active.out { background: var(--amber-bg); color: var(--amber-text); border-color: #ffcc80; }
 
-  /* scan input area */
+  /* method bar */
+  .method-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+  .method-btn { display: flex; align-items: center; gap: 6px; padding: 6px 13px; border-radius: 99px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-muted); font-size: 12px; font-family: inherit; cursor: pointer; font-weight: 500; }
+  .method-btn:hover { background: var(--bg); }
+  .method-btn.active { border-color: var(--accent); background: var(--blue-bg); color: var(--blue-text); }
+  .method-btn.nfc-btn.active { border-color: #00897b; background: var(--teal-bg); color: var(--teal-text); }
+  .method-btn.cam-btn.active { border-color: var(--purple-text); background: var(--purple-bg); color: var(--purple-text); }
+  .method-btn.disabled { opacity: .4; cursor: not-allowed; }
+  .method-tag { font-size: 10px; padding: 1px 5px; border-radius: 99px; background: rgba(0,0,0,.08); }
+
+  /* method hint */
+  .method-hint { border-radius: var(--r); padding: 10px 13px; font-size: 13px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .method-hint.usb    { background: var(--blue-bg);   color: var(--blue-text);   border: 1px solid #90caf9; }
+  .method-hint.camera { background: var(--purple-bg); color: var(--purple-text); border: 1px solid #ce93d8; }
+  .method-hint.nfc    { background: var(--teal-bg);   color: var(--teal-text);   border: 1px solid #80cbc4; }
+
+  /* scan */
   .scan-area { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
   .scan-field { flex: 1; min-width: 160px; }
   .qty-field { width: 80px; flex-shrink: 0; }
   #scan-feedback { margin-top: 10px; font-size: 13px; min-height: 20px; }
   .fb-ok { color: var(--green-text); } .fb-warn { color: var(--amber-text); } .fb-err { color: var(--red-text); }
-
-  /* scan method hint box */
-  .method-hint { border-radius: var(--r); padding: 10px 13px; font-size: 13px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-  .method-hint.usb    { background: var(--blue-bg);   color: var(--blue-text); border: 1px solid #90caf9; }
-  .method-hint.camera { background: var(--purple-bg); color: var(--purple-text); border: 1px solid #ce93d8; }
-  .method-hint.nfc    { background: var(--teal-bg);   color: var(--teal-text);  border: 1px solid #80cbc4; }
-
-  /* compat notice */
-  .compat-notice { background: var(--amber-bg); border: 1px solid #ffcc80; border-radius: var(--r); padding: 10px 13px; font-size: 13px; color: var(--amber-text); display: flex; gap: 8px; align-items: flex-start; }
 
   /* table */
   .table-wrap { overflow-x: auto; }
@@ -150,7 +145,6 @@
   .pill-warn   { background: var(--amber-bg);  color: var(--amber-text);  }
   .pill-bad    { background: var(--red-bg);    color: var(--red-text);    }
   .pill-blue   { background: var(--blue-bg);   color: var(--blue-text);   }
-  .pill-purple { background: var(--purple-bg); color: var(--purple-text); }
   .pill-teal   { background: var(--teal-bg);   color: var(--teal-text);   }
 
   /* log */
@@ -162,7 +156,6 @@
   .log-icon.add   { background: var(--blue-bg);   color: var(--blue-text); }
   .log-icon.alert { background: var(--red-bg);    color: var(--red-text); }
   .log-icon.email { background: var(--purple-bg); color: var(--purple-text); }
-  .log-icon.nfc   { background: var(--teal-bg);   color: var(--teal-text); }
   .log-text { flex: 1; line-height: 1.4; }
   .log-meta { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
   .log-time { font-size: 12px; color: var(--text-faint); white-space: nowrap; padding-top: 2px; }
@@ -177,7 +170,11 @@
   .qty-ctrl button { width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
   .qty-ctrl button:hover { background: var(--bg); }
 
-  /* setup */
+  /* flow url card */
+  .flow-card { background: var(--blue-bg); border: 1px solid #90caf9; border-radius: var(--r); padding: 12px 14px; margin-bottom: 10px; }
+  .flow-card-title { font-size: 11px; font-weight: 700; color: var(--blue-text); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+
+  /* setup steps */
   .setup-step { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
   .setup-step:last-child { border-bottom: none; }
   .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
@@ -185,28 +182,26 @@
   .step-body p, .step-body li { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
   .step-body ul, .step-body ol { margin-left: 16px; }
   code { font-family: 'Cascadia Code',monospace; background: var(--bg); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
-  pre { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 10px; font-size: 11px; overflow-x: auto; font-family: monospace; margin-top: 6px; }
+  pre { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 10px; font-size: 11px; overflow-x: auto; font-family: monospace; margin-top: 6px; white-space: pre-wrap; }
 
   @media (max-width: 640px) {
     .sidebar { display: none; }
     .stats { grid-template-columns: repeat(2,1fr); }
     .form-grid.fg4 { grid-template-columns: 1fr 1fr; }
     .content { padding: 14px; }
-    .topbar { padding: 0 14px; }
   }
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ── Auth overlay ─────────────────────────────────────────────────────────── -->
-<div id="auth-overlay">
-  <div class="auth-card">
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" style="margin:0 auto 14px;display:block"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <h2>Inventory Scanner</h2>
-    <p>Sign in with your Microsoft 365 account to access the shared inventory.</p>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;height:40px" onclick="signIn()">Sign in with Microsoft</button>
-    <p style="margin-top:14px;font-size:12px;color:var(--text-faint)">First time? <button onclick="skipToSetup()" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;padding:0">See the setup guide</button> first.</p>
+<!-- ── Setup required overlay ────────────────────────────────────────────────── -->
+<div id="setup-overlay" style="display:none">
+  <div class="setup-card">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" style="margin:0 auto 14px;display:block"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    <h2>Flow URLs required</h2>
+    <p>This app uses Power Automate flows to connect to SharePoint. Please go to <strong>Settings</strong> and paste in your five flow URLs to get started.</p>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;height:40px;margin-top:8px" id="overlay-settings-btn">Go to Settings</button>
   </div>
 </div>
 
@@ -231,14 +226,14 @@
   <div class="modal-box">
     <div class="nfc-body">
       <div class="nfc-pulse">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00695c" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00695c" stroke-width="1.8"><path d="M20 7c0 0-3-4-8-4S4 7 4 7"/><path d="M20 17c0 0-3 4-8 4s-8-4-8-4"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <h3>NFC Ready</h3>
-      <p>Hold your phone close to the NFC tag on the item.<br>Works with Scannable NFC tags and any NDEF-format tag.</p>
+      <p>Hold your phone against the NFC tag.<br>Works with Scannable tags and any NDEF tag.</p>
       <div id="nfc-feedback">Waiting for tag…</div>
     </div>
     <div class="modal-toolbar">
-      <span class="modal-fb" style="color: var(--teal-text)" id="nfc-mode-label"></span>
+      <span class="modal-fb" style="color:var(--teal-text)" id="nfc-mode-label"></span>
       <button class="modal-close" onclick="stopNFC()">Cancel</button>
     </div>
   </div>
@@ -251,11 +246,7 @@
     Inventory
   </div>
   <div class="topbar-spacer"></div>
-  <div id="user-badge" style="font-size:13px;color:var(--text-muted);display:none"></div>
-  <div class="bp" id="nfc-status-badge" style="display:none">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-    NFC
-  </div>
+  <div class="bp" id="nfc-status-badge" style="display:none">📡 NFC</div>
   <div class="bp" id="teams-badge">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 6.5a4 4 0 1 0-8 0 4 4 0 0 0 8 0zM14 11h-3.5A3.5 3.5 0 0 0 7 14.5V18h14v-3.5A3.5 3.5 0 0 0 17.5 11H14zM5.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 18v-3a3 3 0 0 1 3-3h.5"/></svg>
     Teams
@@ -267,26 +258,26 @@
   <nav class="sidebar">
     <div class="nav-section">
       <div class="nav-label">Scanner</div>
-      <button class="nav-btn active" id="nav-scan" onclick="showTab('scan')">
+      <button class="nav-btn active" id="nav-scan" id="nav-scan">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
         Scan
       </button>
-      <button class="nav-btn" id="nav-inventory" onclick="showTab('inventory')">
+      <button class="nav-btn" id="nav-inventory" id="nav-inventory">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
         Inventory
       </button>
-      <button class="nav-btn" id="nav-log" onclick="showTab('log')">
+      <button class="nav-btn" id="nav-log" id="nav-log">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Activity log
       </button>
     </div>
     <div class="nav-section" style="margin-top:8px">
       <div class="nav-label">Admin</div>
-      <button class="nav-btn" id="nav-settings" onclick="showTab('settings')">
+      <button class="nav-btn" id="nav-settings" id="nav-settings">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Settings
       </button>
-      <button class="nav-btn" id="nav-setup" onclick="showTab('setup')">
+      <button class="nav-btn" id="nav-setup" id="nav-setup">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         Setup guide
       </button>
@@ -295,7 +286,7 @@
 
   <div class="content">
 
-    <!-- ═══════════════════════════ SCAN ═══════════════════════════ -->
+    <!-- ═══════ SCAN ═══════ -->
     <div id="pane-scan">
       <div class="stats">
         <div class="stat"><div class="stat-label">Total SKUs</div><div class="stat-val" id="s-skus">—</div></div>
@@ -306,77 +297,39 @@
 
       <div class="card">
         <div class="card-title">Scan item</div>
-
-        <!-- Scan mode (in / out) -->
         <div class="mode-toggle">
-          <button class="mode-btn active in" id="mode-in" onclick="setMode('in')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-            Scan in
-          </button>
-          <button class="mode-btn out" id="mode-out" onclick="setMode('out')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-            Scan out
-          </button>
+          <button class="mode-btn active in" id="mode-in" onclick="setMode('in')">↓ Scan in</button>
+          <button class="mode-btn out" id="mode-out" onclick="setMode('out')">↑ Scan out</button>
         </div>
 
-        <!-- Input method selector -->
-        <div class="method-bar" id="method-bar">
-          <button class="method-btn active" id="mbtn-usb" onclick="setMethod('usb')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            USB Scanner
-          </button>
-          <button class="method-btn cam-btn" id="mbtn-camera" onclick="setMethod('camera')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            Camera / QR
-          </button>
-          <button class="method-btn nfc-btn disabled" id="mbtn-nfc" onclick="setMethod('nfc')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7c0 0-3-4-8-4S4 7 4 7"/><path d="M20 17c0 0-3 4-8 4s-8-4-8-4"/><path d="M9 12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3z"/></svg>
-            NFC Tap
-            <span class="method-tag" id="nfc-tag">checking…</span>
-          </button>
+        <div class="method-bar">
+          <button class="method-btn active" id="mbtn-usb" onclick="setMethod('usb')">⌨ USB Scanner</button>
+          <button class="method-btn cam-btn" id="mbtn-camera" onclick="setMethod('camera')">📷 Camera / QR</button>
+          <button class="method-btn nfc-btn disabled" id="mbtn-nfc" onclick="setMethod('nfc')">📡 NFC Tap <span class="method-tag" id="nfc-tag">checking…</span></button>
         </div>
 
-        <!-- Method hint -->
-        <div class="method-hint usb" id="method-hint">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          Focus the field below, then scan with your USB or Bluetooth barcode scanner.
-        </div>
+        <div class="method-hint usb" id="method-hint">⌨ Focus the field below, then scan with your USB or Bluetooth barcode scanner.</div>
 
-        <!-- USB input area -->
         <div id="usb-area">
           <div class="scan-area">
-            <div class="scan-field">
-              <label for="scan-input">Barcode / SKU</label>
-              <input type="text" id="scan-input" placeholder="Waiting for scan…" autocomplete="off" autocorrect="off" spellcheck="false" />
-            </div>
-            <div class="qty-field">
-              <label for="scan-qty">Qty</label>
-              <input type="number" id="scan-qty" value="1" min="1" />
-            </div>
+            <div class="scan-field"><label for="scan-input">Barcode / SKU</label><input type="text" id="scan-input" placeholder="Waiting for scan…" autocomplete="off" autocorrect="off" spellcheck="false" /></div>
+            <div class="qty-field"><label for="scan-qty">Qty</label><input type="number" id="scan-qty" value="1" min="1" /></div>
             <button class="btn btn-primary" onclick="doScan()" style="align-self:flex-end">Confirm</button>
           </div>
         </div>
 
-        <!-- Camera button area -->
         <div id="camera-area" style="display:none">
-          <button class="btn btn-purple" style="width:100%;justify-content:center;height:42px" onclick="openCamera()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            Open camera to scan QR / barcode
-          </button>
+          <button class="btn btn-purple" style="width:100%;justify-content:center;height:42px" onclick="openCamera()">📷 Open camera to scan QR / barcode</button>
           <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
-            <div class="scan-field"><label for="scan-input-cam">Or type/paste barcode manually</label><input type="text" id="scan-input-cam" placeholder="Type barcode…" autocomplete="off" /></div>
+            <div class="scan-field"><label for="scan-input-cam">Or type barcode manually</label><input type="text" id="scan-input-cam" placeholder="Type barcode…" autocomplete="off" /></div>
             <div class="qty-field"><label for="scan-qty-cam">Qty</label><input type="number" id="scan-qty-cam" value="1" min="1" /></div>
             <button class="btn btn-primary" onclick="doScanCam()" style="align-self:flex-end">Confirm</button>
           </div>
         </div>
 
-        <!-- NFC button area -->
         <div id="nfc-area" style="display:none">
-          <button class="btn btn-teal" style="width:100%;justify-content:center;height:42px" onclick="openNFC()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7c0 0-3-4-8-4S4 7 4 7"/><path d="M20 17c0 0-3 4-8 4s-8-4-8-4"/><circle cx="12" cy="12" r="3"/></svg>
-            Tap NFC tag to scan
-          </button>
-          <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">Hold your phone against the NFC tag on the item. Works with Scannable tags and any NDEF tag that stores a barcode, URL, or serial number as text.</div>
+          <button class="btn btn-teal" style="width:100%;justify-content:center;height:42px" onclick="openNFC()">📡 Tap NFC tag to scan</button>
+          <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">Hold your phone against the NFC tag. Works with Scannable tags and any NDEF tag.</div>
         </div>
 
         <div id="scan-feedback" style="margin-top:12px"></div>
@@ -388,7 +341,7 @@
       </div>
     </div>
 
-    <!-- ═══════════════════════════ INVENTORY ═══════════════════════════ -->
+    <!-- ═══════ INVENTORY ═══════ -->
     <div id="pane-inventory" style="display:none">
       <div class="card">
         <div class="card-title">Add new item</div>
@@ -403,18 +356,15 @@
           <div class="fg"><label>Supplier email</label><input type="email" id="new-sup-email" placeholder="orders@supplier.com" /></div>
         </div>
         <div class="form-grid fg2" style="margin-bottom:10px">
-          <div class="fg"><label>Reorder qty (suggested in email)</label><input type="number" id="new-reorder" value="20" min="1" /></div>
-          <div class="fg"><label>NFC tag ID (optional — for Scannable tags)</label><input type="text" id="new-nfc-id" placeholder="Leave blank to auto-detect from scan" /></div>
+          <div class="fg"><label>Reorder qty</label><input type="number" id="new-reorder" value="20" min="1" /></div>
+          <div class="fg"><label>NFC Tag ID (optional)</label><input type="text" id="new-nfc-id" placeholder="Leave blank to auto-detect" /></div>
         </div>
         <div style="margin-bottom:12px">
-          <label>Supplier email template (optional — uses default if blank)</label>
-          <textarea id="new-email-tmpl" rows="3" placeholder="Hi {supplier_name}, we'd like to reorder {reorder_qty} units of {item_name} (SKU: {barcode}). Stock is at {current_qty}. Please confirm. Thanks, {sent_by}."></textarea>
+          <label>Supplier email template (optional)</label>
+          <textarea id="new-email-tmpl" rows="3" placeholder="Hi {supplier_name}, we need to reorder {reorder_qty} units of {item_name} (SKU: {barcode}). Stock is at {current_qty}. Thanks, {sent_by}."></textarea>
           <div style="font-size:11px;color:var(--text-faint);margin-top:3px">Tokens: {item_name} {barcode} {current_qty} {reorder_qty} {supplier_name} {sent_by}</div>
         </div>
-        <button class="btn btn-primary" onclick="addItem()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Add item
-        </button>
+        <button class="btn btn-primary" onclick="addItem()">+ Add item</button>
       </div>
 
       <div class="card">
@@ -429,143 +379,201 @@
       </div>
     </div>
 
-    <!-- ═══════════════════════════ LOG ═══════════════════════════ -->
+    <!-- ═══════ LOG ═══════ -->
     <div id="pane-log" style="display:none">
       <div class="card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div class="card-title" style="margin:0">Activity log</div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-sm" onclick="loadLog()">↺ Refresh</button>
-            <button class="btn btn-sm" onclick="exportLog()">↓ Export CSV</button>
-          </div>
+          <button class="btn btn-sm" onclick="loadLog()">↺ Refresh</button>
         </div>
         <div id="log-container"><div class="loading-row"><div class="spinner"></div> Loading…</div></div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════ SETTINGS ═══════════════════════════ -->
+    <!-- ═══════ SETTINGS ═══════ -->
     <div id="pane-settings" style="display:none">
       <div class="card">
-        <div class="card-title">SharePoint site</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">e.g. <code>https://contoso.sharepoint.com/sites/inventory</code></p>
-        <div style="display:flex;gap:8px">
-          <div style="flex:1"><input type="url" id="sp-url" placeholder="https://contoso.sharepoint.com/sites/yoursite" /></div>
-          <button class="btn btn-primary" onclick="saveSPUrl()">Save</button>
-        </div>
-        <div id="sp-feedback" style="margin-top:8px;font-size:13px;color:var(--text-muted)"></div>
-      </div>
+        <div class="card-title">Power Automate flow URLs</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">This app communicates with SharePoint entirely through Power Automate flows. Paste each flow's HTTP trigger URL below. See the <button id="nav-setup" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px;padding:0">Setup guide</button> for how to create each flow.</p>
 
-      <div class="card">
-        <div class="card-title">Teams webhook</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <div style="flex:1;min-width:200px"><input type="url" id="webhook-url" placeholder="https://outlook.office.com/webhook/…" /></div>
-          <button class="btn btn-primary" onclick="saveWebhook()">Save</button>
-          <button class="btn" onclick="testWebhook()">Test</button>
+        <div class="flow-card">
+          <div class="flow-card-title">1 — Get inventory</div>
+          <div style="display:flex;gap:8px"><input type="url" id="flow-get-inv" placeholder="Paste HTTP trigger URL…" /><button class="btn btn-sm btn-primary" onclick="saveFlow('get-inv')">Save</button></div>
         </div>
-        <div id="webhook-feedback" style="margin-top:8px;font-size:13px;color:var(--text-muted)"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Supplier email — Power Automate URL</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Called when stock hits/drops below threshold on a scan-out. See <button onclick="showTab('setup')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px;padding:0">Setup guide step 5</button>.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <div style="flex:1;min-width:200px"><input type="url" id="pa-url" placeholder="https://prod-xx.logic.azure.com/…" /></div>
-          <button class="btn btn-primary" onclick="savePAUrl()">Save</button>
-          <button class="btn" onclick="testPA()">Test email</button>
+        <div class="flow-card">
+          <div class="flow-card-title">2 — Scan in / out (update quantity)</div>
+          <div style="display:flex;gap:8px"><input type="url" id="flow-scan" placeholder="Paste HTTP trigger URL…" /><button class="btn btn-sm btn-primary" onclick="saveFlow('scan')">Save</button></div>
         </div>
-        <div id="pa-feedback" style="margin-top:8px;font-size:13px;color:var(--text-muted)"></div>
-      </div>
+        <div class="flow-card">
+          <div class="flow-card-title">3 — Add new item</div>
+          <div style="display:flex;gap:8px"><input type="url" id="flow-add-item" placeholder="Paste HTTP trigger URL…" /><button class="btn btn-sm btn-primary" onclick="saveFlow('add-item')">Save</button></div>
+        </div>
+        <div class="flow-card">
+          <div class="flow-card-title">4 — Get activity log</div>
+          <div style="display:flex;gap:8px"><input type="url" id="flow-get-log" placeholder="Paste HTTP trigger URL…" /><button class="btn btn-sm btn-primary" onclick="saveFlow('get-log')">Save</button></div>
+        </div>
+        <div class="flow-card">
+          <div class="flow-card-title">5 — Teams notification + supplier email</div>
+          <div style="display:flex;gap:8px"><input type="url" id="flow-notify" placeholder="Paste HTTP trigger URL…" /><button class="btn btn-sm btn-primary" onclick="saveFlow('notify')">Save</button></div>
+        </div>
 
-      <div class="card">
-        <div class="card-title">Global low-stock threshold</div>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:4px">
-          <input type="number" id="global-low" value="5" min="1" style="width:80px" />
-          <button class="btn" onclick="saveGlobalLow()">Save</button>
+        <div style="margin-top:14px">
+          <label>Your name (shown in activity log)</label>
+          <div style="display:flex;gap:8px;margin-top:4px"><input type="text" id="user-name" placeholder="e.g. Thomas Bate" style="max-width:240px" /><button class="btn" onclick="saveName()">Save</button></div>
+        </div>
+
+        <div style="margin-top:14px">
+          <label>Global low-stock threshold</label>
+          <div style="display:flex;gap:8px;margin-top:4px"><input type="number" id="global-low" value="5" min="1" style="width:80px" /><button class="btn" onclick="saveGlobalLow()">Save</button></div>
+        </div>
+
+        <div style="margin-top:16px">
+          <button class="btn btn-primary" onclick="testAllFlows()">Test all flows</button>
+          <div id="test-feedback" style="margin-top:8px;font-size:13px;color:var(--text-muted)"></div>
         </div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════ SETUP ═══════════════════════════ -->
+    <!-- ═══════ SETUP GUIDE ═══════ -->
     <div id="pane-setup" style="display:none">
       <div class="card">
-        <div class="card-title">Setup guide</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Complete these steps once to get fully set up.</p>
+        <div class="card-title">Setup guide — Power Automate flows</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">You need to create 5 flows in Power Automate. Each one follows the same pattern: HTTP trigger → action → respond. Here's each one in detail.</p>
 
         <div class="setup-step">
           <div class="step-num">1</div>
           <div class="step-body">
-            <h3>Create the InventoryItems SharePoint list</h3>
-            <p>Your SharePoint site → <strong>New → List → Blank list</strong>, name it <code>InventoryItems</code>. Add columns:</p>
-            <ul>
-              <li><code>Barcode</code> — Single line of text</li>
-              <li><code>ItemName</code> — Single line of text</li>
-              <li><code>Quantity</code> — Number</li>
-              <li><code>LowStockAt</code> — Number</li>
-              <li><code>SupplierName</code> — Single line of text</li>
-              <li><code>SupplierEmail</code> — Single line of text</li>
-              <li><code>ReorderQty</code> — Number</li>
-              <li><code>EmailTemplate</code> — Multiple lines of text</li>
-              <li><code>NFCTagId</code> — Single line of text (for NFC tag mapping)</li>
-            </ul>
+            <h3>Flow 1 — Get inventory</h3>
+            <p>Reads all items from the InventoryItems SharePoint list and returns them to the app.</p>
+            <ol>
+              <li>Go to <strong>make.powerautomate.com → Create → Instant cloud flow</strong></li>
+              <li>Name it <strong>Inventory - Get Items</strong></li>
+              <li>Trigger: <strong>When an HTTP request is received</strong></li>
+              <li>Set <strong>Who can trigger</strong> to <strong>Anyone</strong> (in trigger Settings tab)</li>
+              <li>Add action: <strong>Get items</strong> (SharePoint)</li>
+              <li>Site: your SharePoint site URL</li>
+              <li>List: <strong>InventoryItems</strong></li>
+              <li>Add action: <strong>Response</strong></li>
+              <li>Status code: <strong>200</strong></li>
+              <li>Body: click the expression editor and paste: <code>body('Get_items')</code></li>
+              <li>Add header: <code>Content-Type</code> = <code>application/json</code></li>
+              <li>Add header: <code>Access-Control-Allow-Origin</code> = <code>*</code></li>
+              <li>Save → copy the HTTP POST URL → paste into Settings as Flow 1</li>
+            </ol>
           </div>
         </div>
 
         <div class="setup-step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <h3>Create the InventoryLog SharePoint list</h3>
-            <p>Name it <code>InventoryLog</code>. Add columns: <code>Action</code>, <code>Description</code> (multi-line), <code>UserName</code>, <code>Barcode</code>, <code>Quantity</code> (Number).</p>
+            <h3>Flow 2 — Scan in / out</h3>
+            <p>Updates the quantity of an item when scanned, and writes to the activity log.</p>
+            <ol>
+              <li>New instant flow, name: <strong>Inventory - Scan Item</strong></li>
+              <li>Trigger: <strong>When an HTTP request is received</strong>, set to <strong>Anyone</strong></li>
+              <li>Paste this JSON schema in the trigger:</li>
+            </ol>
+            <pre>{"type":"object","properties":{
+  "itemId":{"type":"integer"},
+  "newQty":{"type":"integer"},
+  "action":{"type":"string"},
+  "description":{"type":"string"},
+  "userName":{"type":"string"},
+  "barcode":{"type":"string"},
+  "quantity":{"type":"integer"}
+}}</pre>
+            <ol start="4">
+              <li>Add action: <strong>Update item</strong> (SharePoint)</li>
+              <li>Site: your SharePoint URL, List: <strong>InventoryItems</strong></li>
+              <li>ID: dynamic value <strong>itemId</strong></li>
+              <li>Quantity: dynamic value <strong>newQty</strong></li>
+              <li>Add action: <strong>Create item</strong> (SharePoint), List: <strong>InventoryLog</strong></li>
+              <li>Fill: Action=<strong>action</strong>, Description=<strong>description</strong>, UserName=<strong>userName</strong>, Barcode=<strong>barcode</strong>, Quantity=<strong>quantity</strong></li>
+              <li>Add action: <strong>Response</strong>, Status: 200, Body: <code>{"success":true}</code></li>
+              <li>Add header: <code>Access-Control-Allow-Origin</code> = <code>*</code></li>
+              <li>Save → copy URL → paste into Settings as Flow 2</li>
+            </ol>
           </div>
         </div>
 
         <div class="setup-step">
           <div class="step-num">3</div>
           <div class="step-body">
-            <h3>Upload and configure</h3>
-            <p>Upload <code>inventory-scanner.html</code> to SharePoint Documents, open it, go to Settings, paste your SharePoint site URL.</p>
+            <h3>Flow 3 — Add new item</h3>
+            <p>Creates a new item in the InventoryItems list.</p>
+            <ol>
+              <li>New instant flow, name: <strong>Inventory - Add Item</strong></li>
+              <li>Trigger: <strong>When an HTTP request is received</strong>, set to <strong>Anyone</strong></li>
+              <li>JSON schema:</li>
+            </ol>
+            <pre>{"type":"object","properties":{
+  "barcode":{"type":"string"},
+  "itemName":{"type":"string"},
+  "quantity":{"type":"integer"},
+  "lowStockAt":{"type":"integer"},
+  "supplierName":{"type":"string"},
+  "supplierEmail":{"type":"string"},
+  "reorderQty":{"type":"integer"},
+  "nfcTagId":{"type":"string"},
+  "emailTemplate":{"type":"string"}
+}}</pre>
+            <ol start="4">
+              <li>Add action: <strong>Create item</strong> (SharePoint), List: <strong>InventoryItems</strong></li>
+              <li>Map each field to the matching dynamic value</li>
+              <li>Add action: <strong>Response</strong>, Status: 200, Body: <code>{"success":true}</code></li>
+              <li>Add header: <code>Access-Control-Allow-Origin</code> = <code>*</code></li>
+              <li>Save → copy URL → paste into Settings as Flow 3</li>
+            </ol>
           </div>
         </div>
 
         <div class="setup-step">
           <div class="step-num">4</div>
           <div class="step-body">
-            <h3>NFC tags — Scannable and others</h3>
-            <p>The app reads NFC tags automatically on Android Chrome. When you tap a tag, it reads the NDEF payload — which could be:</p>
-            <ul>
-              <li><strong>Scannable tags:</strong> encode a URL like <code>https://scannable.io/s/XXXXXX</code>. The app extracts the serial/ID from the URL path and uses it as the barcode lookup key. Make sure the item's <code>Barcode</code> field in SharePoint matches that serial.</li>
-              <li><strong>Plain text tags:</strong> encode a barcode string directly — these work as-is.</li>
-              <li><strong>URL tags (non-Scannable):</strong> the full URL is used as the lookup key — set the item's Barcode field to match.</li>
-            </ul>
-            <p style="margin-top:6px">On <strong>iPhone</strong>: Apple doesn't support Web NFC in Safari, so use the Camera / QR mode instead.</p>
-            <p style="margin-top:6px">On <strong>desktop</strong>: use the USB/Bluetooth barcode scanner.</p>
+            <h3>Flow 4 — Get activity log</h3>
+            <p>Reads recent entries from the InventoryLog list.</p>
+            <ol>
+              <li>New instant flow, name: <strong>Inventory - Get Log</strong></li>
+              <li>Trigger: <strong>When an HTTP request is received</strong>, set to <strong>Anyone</strong></li>
+              <li>Add action: <strong>Get items</strong> (SharePoint), List: <strong>InventoryLog</strong></li>
+              <li>In advanced options set Top Count to <strong>200</strong> and Order By to <strong>Created desc</strong></li>
+              <li>Add action: <strong>Response</strong>, Status: 200, Body: <code>body('Get_items')</code></li>
+              <li>Add header: <code>Access-Control-Allow-Origin</code> = <code>*</code></li>
+              <li>Save → copy URL → paste into Settings as Flow 4</li>
+            </ol>
           </div>
         </div>
 
         <div class="setup-step">
           <div class="step-num">5</div>
           <div class="step-body">
-            <h3>Supplier email — Power Automate flow</h3>
-            <p>Go to <strong>make.powerautomate.com → New flow → Instant cloud flow</strong>.</p>
+            <h3>Flow 5 — Teams notification + supplier email</h3>
+            <p>Posts to the Teams channel and optionally sends a supplier email.</p>
             <ol>
-              <li>Trigger: <strong>When an HTTP request is received</strong></li>
-              <li>Paste this JSON schema in the Request Body field:</li>
+              <li>New instant flow, name: <strong>Inventory - Notify</strong></li>
+              <li>Trigger: <strong>When an HTTP request is received</strong>, set to <strong>Anyone</strong></li>
+              <li>JSON schema:</li>
             </ol>
-            <pre>{ "type":"object","properties":{
+            <pre>{"type":"object","properties":{
+  "teamsMessage":{"type":"string"},
+  "sendEmail":{"type":"boolean"},
   "supplierEmail":{"type":"string"},
   "supplierName":{"type":"string"},
   "itemName":{"type":"string"},
-  "barcode":{"type":"string"},
-  "currentQty":{"type":"integer"},
-  "reorderQty":{"type":"integer"},
-  "emailBody":{"type":"string"},
-  "sentBy":{"type":"string"}
+  "emailBody":{"type":"string"}
 }}</pre>
-            <ol start="3">
-              <li>Add action: <strong>Send an email (V2)</strong></li>
-              <li>To: <code>triggerBody()?['supplierEmail']</code></li>
-              <li>Subject: <code>Reorder request — @{triggerBody()?['itemName']}</code></li>
-              <li>Body: <code>@{triggerBody()?['emailBody']}</code></li>
-              <li>Save → copy the HTTP POST URL → paste in Settings → Supplier email</li>
+            <ol start="4">
+              <li>Add action: <strong>Post message in a chat or channel</strong> (Teams)</li>
+              <li>Post as: Flow bot, Post in: Channel</li>
+              <li>Team: <strong>Nelson Marlborough Equipment Group</strong></li>
+              <li>Channel: <strong>Nelson Equipment Store Inventory</strong></li>
+              <li>Message: dynamic value <strong>teamsMessage</strong></li>
+              <li>Add a <strong>Condition</strong>: if <strong>sendEmail</strong> is equal to <strong>true</strong></li>
+              <li>In the Yes branch add: <strong>Send an email (V2)</strong></li>
+              <li>To: <strong>supplierEmail</strong>, Subject: <code>Reorder — @{triggerBody()?['itemName']}</code>, Body: <strong>emailBody</strong></li>
+              <li>Add action: <strong>Response</strong>, Status: 200, Body: <code>{"success":true}</code></li>
+              <li>Add header: <code>Access-Control-Allow-Origin</code> = <code>*</code></li>
+              <li>Save → copy URL → paste into Settings as Flow 5</li>
             </ol>
           </div>
         </div>
@@ -573,16 +581,16 @@
         <div class="setup-step">
           <div class="step-num">6</div>
           <div class="step-body">
-            <h3>Teams webhook</h3>
-            <p>In Teams channel → <strong>···</strong> → <strong>Connectors → Incoming Webhook</strong> → Configure → copy URL → paste in Settings.</p>
-          </div>
-        </div>
-
-        <div class="setup-step">
-          <div class="step-num">7</div>
-          <div class="step-body">
-            <h3>Pin as a Teams tab</h3>
-            <p>In Teams channel → <strong>+</strong> → <strong>Website</strong> → paste the SharePoint file URL → Save. All users share the same live inventory.</p>
+            <h3>Embed in a SharePoint Site Page</h3>
+            <ol>
+              <li>Go to your SharePoint site</li>
+              <li>Click <strong>Pages → New → Site page</strong></li>
+              <li>Title it <strong>Inventory Scanner</strong></li>
+              <li>Click <strong>+</strong> to add a web part → search <strong>Embed</strong></li>
+              <li>In the embed code box paste: <code>&lt;iframe src="https://inventoryscanner.github.io/inventory-scanner/inventory-scanner.html" style="width:100%;height:800px;border:none"&gt;&lt;/iframe&gt;</code></li>
+              <li>Click <strong>Publish</strong></li>
+              <li>In Teams, click <strong>+</strong> in your channel tabs → <strong>SharePoint</strong> → select this page</li>
+            </ol>
           </div>
         </div>
       </div>
@@ -593,38 +601,102 @@
 </div><!-- /app -->
 
 <script>
-// ─── Config ────────────────────────────────────────────────────────────────────
-let spSiteUrl  = localStorage.getItem('inv_spSite')  || '';
-let webhookUrl = localStorage.getItem('inv_webhook') || '';
-let paUrl      = localStorage.getItem('inv_paUrl')   || '';
-let globalLow  = parseInt(localStorage.getItem('inv_globalLow') || '5');
-
-let currentUser    = null;
-let isAuthenticated = false;
-let scanMode       = 'in';
-let inputMethod    = 'usb';
-let recentScans    = [];
+// ─── Config (localStorage) ────────────────────────────────────────────────────
+const FLOWS = { 'get-inv': null, 'scan': null, 'add-item': null, 'get-log': null, 'notify': null };
+let globalLow   = 5;
+let currentUser = 'Inventory user';
+let scanMode    = 'in';
+let inputMethod = 'usb';
+let recentScans = [];
 let inventoryCache = [];
 
-// ─── NFC capability detection ─────────────────────────────────────────────────
+function loadConfig() {
+  Object.keys(FLOWS).forEach(k => { FLOWS[k] = localStorage.getItem('inv_flow_'+k) || null; });
+  globalLow   = parseInt(localStorage.getItem('inv_globalLow') || '5');
+  currentUser = localStorage.getItem('inv_user') || 'Inventory user';
+  document.getElementById('global-low').value = globalLow;
+  document.getElementById('user-name').value  = currentUser;
+  Object.keys(FLOWS).forEach(k => { const el = document.getElementById('flow-'+k); if (el && FLOWS[k]) el.value = FLOWS[k]; });
+  updateTeamsBadge();
+}
+
+function saveFlow(k) {
+  const val = document.getElementById('flow-'+k).value.trim();
+  FLOWS[k] = val || null;
+  localStorage.setItem('inv_flow_'+k, val);
+  updateTeamsBadge();
+}
+
+function saveName()       { currentUser = document.getElementById('user-name').value.trim() || 'Inventory user'; localStorage.setItem('inv_user', currentUser); }
+function saveGlobalLow()  { globalLow = parseInt(document.getElementById('global-low').value)||5; localStorage.setItem('inv_globalLow', globalLow); }
+
+function updateTeamsBadge() {
+  const b = document.getElementById('teams-badge');
+  const connected = FLOWS['notify'] && FLOWS['get-inv'] && FLOWS['scan'];
+  b.className = 'bp' + (connected ? ' ok' : '');
+  b.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 6.5a4 4 0 1 0-8 0 4 4 0 0 0 8 0zM14 11h-3.5A3.5 3.5 0 0 0 7 14.5V18h14v-3.5A3.5 3.5 0 0 0 17.5 11H14zM5.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 18v-3a3 3 0 0 1 3-3h.5"/></svg> ${connected ? 'Flows connected ✓' : 'Flows not set up'}`;
+}
+
+// ─── Flow caller ──────────────────────────────────────────────────────────────
+async function callFlow(key, body) {
+  const url = FLOWS[key];
+  if (!url) throw new Error('Flow "'+key+'" URL not set — go to Settings');
+  const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  if (!r.ok) throw new Error('Flow error: HTTP ' + r.status);
+  const text = await r.text();
+  try { return text ? JSON.parse(text) : {}; } catch(_) { return {}; }
+}
+
+// ─── NFC ──────────────────────────────────────────────────────────────────────
 const nfcSupported = 'NDEFReader' in window;
-let nfcReader      = null;
-let nfcAbort       = null;
+let nfcAbort = null;
 
 function initNFCButton() {
   const btn = document.getElementById('mbtn-nfc');
   const tag = document.getElementById('nfc-tag');
-  const badge = document.getElementById('nfc-status-badge');
   if (nfcSupported) {
     btn.classList.remove('disabled');
     tag.textContent = 'available';
-    badge.style.display = 'flex';
-    badge.className = 'bp nfc';
-    badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg> NFC ✓`;
+    document.getElementById('nfc-status-badge').style.display = 'flex';
   } else {
-    tag.textContent = window.navigator.userAgent.includes('iPhone') || window.navigator.userAgent.includes('iPad') ? 'iOS — use camera' : 'desktop — use USB';
+    const ua = navigator.userAgent;
+    tag.textContent = /iPhone|iPad/.test(ua) ? 'iOS — use camera' : 'desktop — use USB';
   }
 }
+
+async function openNFC() {
+  if (!nfcSupported) { alert('Web NFC not supported. Use Chrome on Android.'); return; }
+  document.getElementById('nfc-mode-label').textContent = 'Mode: Scan ' + scanMode;
+  document.getElementById('nfc-feedback').textContent = 'Waiting for tag…';
+  document.getElementById('nfc-modal').classList.add('open');
+  nfcAbort = new AbortController();
+  try {
+    const reader = new NDEFReader();
+    await reader.scan({ signal: nfcAbort.signal });
+    reader.onreadingerror = () => { document.getElementById('nfc-feedback').textContent = 'Could not read tag — try again.'; };
+    reader.onreading = (event) => {
+      const payload = extractNFCPayload(event);
+      if (payload) { document.getElementById('nfc-feedback').textContent = '✓ ' + payload; setTimeout(()=>stopNFC(),800); handleScanResult(payload,'nfc'); }
+      else { document.getElementById('nfc-feedback').textContent = 'Tag found but could not read payload.'; }
+    };
+  } catch(e) { document.getElementById('nfc-feedback').textContent = 'NFC error: ' + e.message; }
+}
+
+function extractNFCPayload(event) {
+  for (const record of event.message.records) {
+    if (record.recordType === 'text') { return new TextDecoder(record.encoding||'utf-8').decode(record.data).trim(); }
+    if (record.recordType === 'url' || record.recordType === 'absolute-url') {
+      const url = new TextDecoder().decode(record.data);
+      const m = url.match(/scannable\.io\/[^/]+\/([^/?#]+)/i);
+      if (m) return m[1];
+      try { const u = new URL(url); const p = u.pathname.split('/').filter(Boolean); if (p.length) return p[p.length-1]; } catch(_){}
+      return url;
+    }
+  }
+  return event.serialNumber || null;
+}
+
+function stopNFC() { if (nfcAbort) nfcAbort.abort(); nfcAbort = null; document.getElementById('nfc-modal').classList.remove('open'); }
 
 // ─── Camera ───────────────────────────────────────────────────────────────────
 let camStream = null; let camRAF = null; let zxingReader = null;
@@ -636,331 +708,66 @@ async function openCamera() {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const sel = document.getElementById('cam-select');
     sel.innerHTML = '';
-    devices.filter(d => d.kind === 'videoinput').forEach(d => {
-      const o = document.createElement('option'); o.value = d.deviceId; o.textContent = d.label || 'Camera'; sel.appendChild(o);
-    });
-    const back = devices.find(d => d.kind === 'videoinput' && /back|rear|environment/i.test(d.label));
+    devices.filter(d=>d.kind==='videoinput').forEach(d=>{ const o=document.createElement('option'); o.value=d.deviceId; o.textContent=d.label||'Camera'; sel.appendChild(o); });
+    const back = devices.find(d=>d.kind==='videoinput'&&/back|rear|environment/i.test(d.label));
     if (back) sel.value = back.deviceId;
     sel.onchange = () => startCamStream(sel.value);
-    await startCamStream(sel.value || undefined);
-  } catch(e) { document.getElementById('cam-feedback').textContent = 'Camera error: ' + e.message; }
+    await startCamStream(sel.value||undefined);
+  } catch(e) { document.getElementById('cam-feedback').textContent = 'Camera error: '+e.message; }
 }
 
 async function startCamStream(deviceId) {
-  if (camStream) camStream.getTracks().forEach(t => t.stop());
-  const c = { video: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: 'environment' } };
-  camStream = await navigator.mediaDevices.getUserMedia(c);
-  const v = document.getElementById('cam-video');
-  v.srcObject = camStream; await v.play();
+  if (camStream) camStream.getTracks().forEach(t=>t.stop());
+  camStream = await navigator.mediaDevices.getUserMedia({ video: deviceId?{deviceId:{exact:deviceId}}:{facingMode:'environment'} });
+  const v = document.getElementById('cam-video'); v.srcObject=camStream; await v.play();
   document.getElementById('cam-feedback').textContent = 'Scanning…';
-  startDetection(v);
-}
-
-async function startDetection(video) {
   if (camRAF) cancelAnimationFrame(camRAF);
   if ('BarcodeDetector' in window) {
-    const det = new BarcodeDetector({ formats: ['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf','data_matrix','aztec','pdf417'] });
+    const det = new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','data_matrix','aztec','pdf417']});
     const loop = async () => {
       if (!document.getElementById('cam-modal').classList.contains('open')) return;
-      try { const r = await det.detect(video); if (r.length) { handleScanResult(r[0].rawValue, 'camera'); return; } } catch(_){}
+      try { const r=await det.detect(v); if(r.length){handleScanResult(r[0].rawValue,'camera');return;} } catch(_){}
       camRAF = requestAnimationFrame(loop);
     };
-    camRAF = requestAnimationFrame(loop); return;
+    camRAF = requestAnimationFrame(loop);
+  } else {
+    document.getElementById('cam-feedback').textContent = 'Loading scanner…';
+    if (!window.ZXing) await new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+    if (!zxingReader) zxingReader = new window.ZXing.BrowserMultiFormatReader();
+    document.getElementById('cam-feedback').textContent = 'Scanning…';
+    try { await zxingReader.decodeFromVideoElement(v,(r)=>{ if(r) handleScanResult(r.getText(),'camera'); }); } catch(e){ document.getElementById('cam-feedback').textContent='Error: '+e.message; }
   }
-  // ZXing fallback
-  document.getElementById('cam-feedback').textContent = 'Loading scanner…';
-  if (!window.ZXing) {
-    await new Promise((res,rej) => { const s = document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
-  }
-  if (!zxingReader) zxingReader = new window.ZXing.BrowserMultiFormatReader();
-  document.getElementById('cam-feedback').textContent = 'Scanning…';
-  try { await zxingReader.decodeFromVideoElement(video, (r,e) => { if (r) handleScanResult(r.getText(), 'camera'); }); }
-  catch(e) { document.getElementById('cam-feedback').textContent = 'Error: ' + e.message; }
 }
 
 function stopCamera() {
   if (camRAF) cancelAnimationFrame(camRAF);
-  if (camStream) camStream.getTracks().forEach(t => t.stop());
-  if (zxingReader) { try { zxingReader.reset(); } catch(_){} }
-  camStream = null;
-  document.getElementById('cam-modal').classList.remove('open');
-  document.getElementById('cam-video').srcObject = null;
+  if (camStream) camStream.getTracks().forEach(t=>t.stop());
+  if (zxingReader) { try{zxingReader.reset();}catch(_){} }
+  camStream=null; document.getElementById('cam-modal').classList.remove('open'); document.getElementById('cam-video').srcObject=null;
 }
 
-// ─── NFC ──────────────────────────────────────────────────────────────────────
-async function openNFC() {
-  if (!nfcSupported) { alert('Web NFC is not supported on this browser. Use Chrome on Android.'); return; }
-  document.getElementById('nfc-mode-label').textContent = 'Mode: Scan ' + scanMode;
-  document.getElementById('nfc-feedback').textContent = 'Waiting for tag…';
-  document.getElementById('nfc-modal').classList.add('open');
-  nfcAbort = new AbortController();
-  try {
-    nfcReader = new NDEFReader();
-    await nfcReader.scan({ signal: nfcAbort.signal });
-    nfcReader.onreadingerror = () => { document.getElementById('nfc-feedback').textContent = 'Could not read tag — try again.'; };
-    nfcReader.onreading = (event) => {
-      const payload = extractNFCPayload(event);
-      if (payload) {
-        document.getElementById('nfc-feedback').textContent = '✓ Tag read: ' + payload;
-        setTimeout(() => stopNFC(), 800);
-        handleScanResult(payload, 'nfc');
-      } else {
-        document.getElementById('nfc-feedback').textContent = 'Tag found but could not read payload — check tag format.';
-      }
-    };
-  } catch(e) {
-    document.getElementById('nfc-feedback').textContent = 'NFC error: ' + e.message;
-  }
-}
-
-function extractNFCPayload(event) {
-  // Try to extract the most useful identifier from the NDEF message
-  for (const record of event.message.records) {
-    if (record.recordType === 'text') {
-      const dec = new TextDecoder(record.encoding || 'utf-8');
-      return dec.decode(record.data).trim();
-    }
-    if (record.recordType === 'url' || record.recordType === 'absolute-url') {
-      const dec = new TextDecoder();
-      const url = dec.decode(record.data);
-      // Scannable tags encode URLs like https://scannable.io/s/SERIAL — extract the serial
-      const scannableMatch = url.match(/scannable\.io\/[^/]+\/([^/?#]+)/i);
-      if (scannableMatch) return scannableMatch[1];
-      // For other URLs, try to get last path segment as it's likely the ID
-      try {
-        const u = new URL(url);
-        const parts = u.pathname.split('/').filter(Boolean);
-        if (parts.length) return parts[parts.length - 1];
-      } catch(_) {}
-      return url; // fallback: use full URL as key
-    }
-  }
-  // Fallback: use tag serial number
-  return event.serialNumber || null;
-}
-
-function stopNFC() {
-  if (nfcAbort) nfcAbort.abort();
-  nfcAbort = null; nfcReader = null;
-  document.getElementById('nfc-modal').classList.remove('open');
-}
-
-// ─── Unified scan result handler ──────────────────────────────────────────────
 async function handleScanResult(value, method) {
   if (!value) return;
-  // Put value in feedback and auto-confirm
-  setFeedback(`${method === 'nfc' ? '📡 NFC' : '📷 Camera'} read: ${value} — processing…`, 'warn');
-  // Trigger the scan directly
+  setFeedback((method==='nfc'?'📡 NFC':'📷 Camera')+' read: '+value+' — processing…','warn');
+  stopCamera();
   await processScan(value, 1, method);
 }
 
-// ─── Input method UI ──────────────────────────────────────────────────────────
-const methodHints = {
-  usb:    { cls: 'usb',    icon: '⌨', text: 'Focus the field below, then scan with your USB or Bluetooth barcode scanner.' },
-  camera: { cls: 'camera', icon: '📷', text: 'Tap the button below to open the camera. Point at any QR code or barcode.' },
-  nfc:    { cls: 'nfc',    icon: '📡', text: 'Tap the button below, then hold your phone against the NFC tag. Works with Scannable NFC tags and any NDEF tag.' }
-};
-
+// ─── Method UI ────────────────────────────────────────────────────────────────
 function setMethod(m) {
-  if (m === 'nfc' && !nfcSupported) { return; }
+  if (m==='nfc'&&!nfcSupported) return;
   inputMethod = m;
-  ['usb','camera','nfc'].forEach(id => {
-    const b = document.getElementById('mbtn-'+id);
-    if (!b) return;
-    b.className = b.className.replace(' active','');
-    if (id === m) b.className += ' active';
-  });
-  const h = methodHints[m];
+  ['usb','camera','nfc'].forEach(id=>{ const b=document.getElementById('mbtn-'+id); if(b){b.className=b.className.replace(' active',''); if(id===m)b.className+=' active'; } });
+  const hints = { usb:{cls:'usb',text:'⌨ Focus the field below, then scan with your USB or Bluetooth barcode scanner.'}, camera:{cls:'camera',text:'📷 Tap the button below to open the camera. Point at any QR code or barcode.'}, nfc:{cls:'nfc',text:'📡 Tap the button below, then hold your phone against the NFC tag.'} };
+  const h = hints[m];
   const hint = document.getElementById('method-hint');
-  hint.className = 'method-hint ' + h.cls;
-  hint.textContent = h.icon + ' ' + h.text;
-  document.getElementById('usb-area').style.display    = m === 'usb'    ? '' : 'none';
-  document.getElementById('camera-area').style.display = m === 'camera' ? '' : 'none';
-  document.getElementById('nfc-area').style.display    = m === 'nfc'    ? '' : 'none';
-  if (m === 'usb') setTimeout(() => document.getElementById('scan-input').focus(), 60);
+  hint.className='method-hint '+h.cls; hint.textContent=h.text;
+  document.getElementById('usb-area').style.display    = m==='usb'   ?'':'none';
+  document.getElementById('camera-area').style.display = m==='camera'?'':'none';
+  document.getElementById('nfc-area').style.display    = m==='nfc'   ?'':'none';
+  if (m==='usb') setTimeout(()=>document.getElementById('scan-input').focus(),60);
 }
 
-// ─── Auth ─────────────────────────────────────────────────────────────────────
-function signIn() {
-  if (spSiteUrl) {
-    window.location.href = spSiteUrl + '/_layouts/15/Authenticate.aspx?Source=' + encodeURIComponent(window.location.href);
-  } else { alert('Set your SharePoint site URL in Settings first.'); skipToSetup(); }
-}
-function skipToSetup() { document.getElementById('auth-overlay').style.display = 'none'; showTab('setup'); }
-
-function detectAuth() {
-  if (typeof _spPageContextInfo !== 'undefined') {
-    isAuthenticated = true; currentUser = _spPageContextInfo.userDisplayName || 'User';
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('user-badge').textContent = currentUser;
-    document.getElementById('user-badge').style.display = '';
-    init(); return;
-  }
-  if (spSiteUrl) {
-    fetch(spSiteUrl + '/_api/web/currentuser?$select=Title', { credentials: 'include' })
-      .then(r => r.json()).then(d => {
-        isAuthenticated = true; currentUser = (d.d && d.d.Title) || d.value || 'User';
-        document.getElementById('auth-overlay').style.display = 'none';
-        document.getElementById('user-badge').textContent = currentUser;
-        document.getElementById('user-badge').style.display = '';
-        init();
-      }).catch(() => { document.getElementById('auth-overlay').style.display = 'flex'; });
-  } else { document.getElementById('auth-overlay').style.display = 'none'; showTab('setup'); }
-}
-
-// ─── SP REST ──────────────────────────────────────────────────────────────────
-async function spGet(path) {
-  const r = await fetch(spSiteUrl + path, { credentials:'include', headers:{ Accept:'application/json;odata=verbose' } });
-  if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
-  return r.json();
-}
-async function getDigest() {
-  const r = await fetch(spSiteUrl + '/_api/contextinfo', { method:'POST', credentials:'include', headers:{ Accept:'application/json;odata=verbose','Content-Type':'application/json;odata=verbose' } });
-  return (await r.json()).d.GetContextWebInformation.FormDigestValue;
-}
-async function spPost(path, body) {
-  const d = await getDigest();
-  const r = await fetch(spSiteUrl+path, { method:'POST', credentials:'include', headers:{ Accept:'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','X-RequestDigest':d }, body:JSON.stringify(body) });
-  if (!r.ok) throw new Error(r.status + ': ' + await r.text());
-  return r.json();
-}
-async function spPatch(path, body) {
-  const d = await getDigest();
-  const r = await fetch(spSiteUrl+path, { method:'POST', credentials:'include', headers:{ Accept:'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','X-RequestDigest':d,'X-HTTP-Method':'MERGE','If-Match':'*' }, body:JSON.stringify(body) });
-  if (!r.ok && r.status !== 204) throw new Error(r.status);
-}
-async function spDelete(path) {
-  const d = await getDigest();
-  await fetch(spSiteUrl+path, { method:'POST', credentials:'include', headers:{ 'X-RequestDigest':d,'X-HTTP-Method':'DELETE','If-Match':'*' } });
-}
-
-// ─── Init ─────────────────────────────────────────────────────────────────────
-function init() {
-  document.getElementById('sp-url').value      = spSiteUrl;
-  document.getElementById('webhook-url').value = webhookUrl;
-  document.getElementById('pa-url').value      = paUrl;
-  document.getElementById('global-low').value  = globalLow;
-  updateTeamsBadge();
-  initNFCButton();
-  loadInventory();
-  document.getElementById('scan-input').focus();
-}
-
-// ─── Nav ──────────────────────────────────────────────────────────────────────
-function showTab(t) {
-  ['scan','inventory','log','settings','setup'].forEach(id => {
-    document.getElementById('pane-'+id).style.display = id===t ? '' : 'none';
-    const nb = document.getElementById('nav-'+id); if (nb) nb.className = 'nav-btn'+(id===t?' active':'');
-  });
-  if (t==='scan')      setTimeout(() => { if (inputMethod==='usb') document.getElementById('scan-input').focus(); }, 60);
-  if (t==='inventory' && isAuthenticated) loadInventory();
-  if (t==='log'       && isAuthenticated) loadLog();
-}
-
-// ─── Inventory ────────────────────────────────────────────────────────────────
-const SP_SELECT = "$select=ID,Barcode,ItemName,Quantity,LowStockAt,SupplierName,SupplierEmail,ReorderQty,EmailTemplate,NFCTagId";
-
-async function loadInventory() {
-  const wrap = document.getElementById('inv-table-wrap');
-  wrap.innerHTML = '<div class="loading-row"><div class="spinner"></div> Loading…</div>';
-  try {
-    const data = await spGet(`/_api/web/lists/getbytitle('InventoryItems')/items?${SP_SELECT}&$top=500&$orderby=ItemName`);
-    inventoryCache = data.d.results;
-    updateStats(inventoryCache);
-    renderInvTable(inventoryCache);
-  } catch(e) {
-    wrap.innerHTML = '<div class="empty">Could not load — check SharePoint URL in Settings.<br><small style="color:var(--text-faint)">' + e.message + '</small></div>';
-  }
-}
-
-function updateStats(items) {
-  const t = i => i.LowStockAt||globalLow;
-  document.getElementById('s-skus').textContent  = items.length;
-  document.getElementById('s-units').textContent = items.reduce((s,i) => s+(i.Quantity||0), 0);
-  document.getElementById('s-low').textContent   = items.filter(i => (i.Quantity||0)>0 && (i.Quantity||0)<=t(i)).length;
-  document.getElementById('s-out').textContent   = items.filter(i => (i.Quantity||0)===0).length;
-}
-
-function statusPill(item) {
-  const t=item.LowStockAt||globalLow, q=item.Quantity||0;
-  if (q===0) return '<span class="pill pill-bad">Out of stock</span>';
-  if (q<=t)  return '<span class="pill pill-warn">Low stock</span>';
-  return '<span class="pill pill-ok">OK</span>';
-}
-
-function renderInvTable(items) {
-  const wrap = document.getElementById('inv-table-wrap');
-  if (!items.length) { wrap.innerHTML = '<div class="empty">No items yet — add one above</div>'; return; }
-  wrap.innerHTML = `<table>
-    <thead><tr>
-      <th style="width:110px">Barcode</th>
-      <th>Name</th>
-      <th style="width:90px">Qty</th>
-      <th style="width:100px">Status</th>
-      <th>Supplier</th>
-      <th style="width:72px">Alert at</th>
-      <th style="width:46px"></th>
-    </tr></thead>
-    <tbody>${items.map(item => `
-      <tr>
-        <td class="mono">${esc(item.Barcode||'')}</td>
-        <td>${esc(item.ItemName||'')}${item.NFCTagId ? '<br><span class="pill pill-teal" style="font-size:10px;margin-top:2px">NFC</span>':''}</td>
-        <td><div class="qty-ctrl">
-          <button onclick="adjQty(${item.ID},-1)">−</button>
-          <span style="min-width:28px;text-align:center;font-weight:500">${item.Quantity||0}</span>
-          <button onclick="adjQty(${item.ID},1)">+</button>
-        </div></td>
-        <td>${statusPill(item)}</td>
-        <td>${item.SupplierName ? `<span style="font-size:12px">${esc(item.SupplierName)}</span>${item.SupplierEmail?`<br><span style="font-size:11px;color:var(--text-faint)">${esc(item.SupplierEmail)}</span>`:''}` : '<span style="color:var(--text-faint);font-size:12px">—</span>'}</td>
-        <td>${item.LowStockAt||globalLow}</td>
-        <td><button class="btn btn-sm btn-danger" onclick="removeItem(${item.ID},'${esc(item.ItemName||'')}')" aria-label="remove">✕</button></td>
-      </tr>`).join('')}
-    </tbody></table>`;
-}
-
-async function addItem() {
-  const bc   = document.getElementById('new-barcode').value.trim();
-  const name = document.getElementById('new-name').value.trim();
-  const qty  = parseInt(document.getElementById('new-qty').value)||0;
-  const low  = parseInt(document.getElementById('new-low').value)||globalLow;
-  const supN = document.getElementById('new-sup-name').value.trim();
-  const supE = document.getElementById('new-sup-email').value.trim();
-  const rOrd = parseInt(document.getElementById('new-reorder').value)||20;
-  const nfcId= document.getElementById('new-nfc-id').value.trim();
-  const tmpl = document.getElementById('new-email-tmpl').value.trim();
-  if (!bc||!name) { alert('Barcode and name are required'); return; }
-  if (inventoryCache.find(i => i.Barcode===bc)) { alert('Barcode already exists'); return; }
-  try {
-    await spPost("/_api/web/lists/getbytitle('InventoryItems')/items", {
-      '__metadata':{'type':'SP.Data.InventoryItemsListItem'},
-      Barcode:bc,ItemName:name,Quantity:qty,LowStockAt:low,
-      SupplierName:supN,SupplierEmail:supE,ReorderQty:rOrd,NFCTagId:nfcId,EmailTemplate:tmpl
-    });
-    await addLog('add',`Added: ${name} (${bc}), qty: ${qty}`,bc,qty);
-    ['new-barcode','new-name','new-sup-name','new-sup-email','new-nfc-id','new-email-tmpl'].forEach(id => document.getElementById(id).value='');
-    document.getElementById('new-qty').value='0';
-    document.getElementById('new-reorder').value='20';
-    await loadInventory();
-  } catch(e) { alert('Error: '+e.message); }
-}
-
-async function adjQty(id, delta) {
-  const item = inventoryCache.find(i => i.ID===id); if (!item) return;
-  const nq = Math.max(0,(item.Quantity||0)+delta);
-  try {
-    await spPatch(`/_api/web/lists/getbytitle('InventoryItems')/items(${id})`, { '__metadata':{'type':'SP.Data.InventoryItemsListItem'},Quantity:nq });
-    await addLog(delta>0?'in':'out',`Manual adj: ${item.ItemName} → qty ${nq}`,item.Barcode,Math.abs(delta));
-    await loadInventory();
-  } catch(e) { alert('Error: '+e.message); }
-}
-
-async function removeItem(id,name) {
-  if (!confirm('Remove '+name+'?')) return;
-  try { await spDelete(`/_api/web/lists/getbytitle('InventoryItems')/items(${id})`); await loadInventory(); }
-  catch(e) { alert('Error: '+e.message); }
-}
-
-// ─── Scan ─────────────────────────────────────────────────────────────────────
 function setMode(m) {
   scanMode = m;
   document.getElementById('mode-in').className  = 'mode-btn in'  + (m==='in' ?' active':'');
@@ -968,84 +775,177 @@ function setMode(m) {
   if (inputMethod==='usb') document.getElementById('scan-input').focus();
 }
 
-// Entry points for each input method
+// ─── Nav ──────────────────────────────────────────────────────────────────────
+function showTab(t) {
+  ['scan','inventory','log','settings','setup'].forEach(id=>{
+    document.getElementById('pane-'+id).style.display = id===t?'':'none';
+    const nb=document.getElementById('nav-'+id); if(nb) nb.className='nav-btn'+(id===t?' active':'');
+  });
+  if (t==='scan')      setTimeout(()=>{ if(inputMethod==='usb') document.getElementById('scan-input').focus(); },60);
+  if (t==='inventory') loadInventory();
+  if (t==='log')       loadLog();
+}
+
+// ─── Inventory ────────────────────────────────────────────────────────────────
+async function loadInventory() {
+  const wrap = document.getElementById('inv-table-wrap');
+  wrap.innerHTML = '<div class="loading-row"><div class="spinner"></div> Loading…</div>';
+  if (!FLOWS['get-inv']) { wrap.innerHTML='<div class="empty">Flow 1 URL not set — go to Settings</div>'; return; }
+  try {
+    const data = await callFlow('get-inv', {});
+    inventoryCache = data.value || [];
+    updateStats(inventoryCache);
+    renderInvTable(inventoryCache);
+  } catch(e) { wrap.innerHTML='<div class="empty">Could not load inventory.<br><small>'+e.message+'</small></div>'; }
+}
+
+function updateStats(items) {
+  const t=i=>i.LowStockAt||globalLow;
+  document.getElementById('s-skus').textContent  = items.length;
+  document.getElementById('s-units').textContent = items.reduce((s,i)=>s+(i.Quantity||0),0);
+  document.getElementById('s-low').textContent   = items.filter(i=>(i.Quantity||0)>0&&(i.Quantity||0)<=t(i)).length;
+  document.getElementById('s-out').textContent   = items.filter(i=>(i.Quantity||0)===0).length;
+}
+
+function statusPill(item) {
+  const t=item.LowStockAt||globalLow, q=item.Quantity||0;
+  if(q===0) return '<span class="pill pill-bad">Out of stock</span>';
+  if(q<=t)  return '<span class="pill pill-warn">Low stock</span>';
+  return '<span class="pill pill-ok">OK</span>';
+}
+
+function renderInvTable(items) {
+  const wrap=document.getElementById('inv-table-wrap');
+  if(!items.length){wrap.innerHTML='<div class="empty">No items yet — add one above</div>';return;}
+  wrap.innerHTML=`<table><thead><tr>
+    <th style="width:110px">Barcode</th><th>Name</th><th style="width:90px">Qty</th>
+    <th style="width:100px">Status</th><th>Supplier</th><th style="width:72px">Alert at</th><th style="width:46px"></th>
+  </tr></thead><tbody>${items.map(item=>`
+    <tr>
+      <td class="mono">${esc(item.Barcode||'')}</td>
+      <td>${esc(item.ItemName||'')}${item.NFCTagId?'<br><span class="pill pill-teal" style="font-size:10px">NFC</span>':''}</td>
+      <td><div class="qty-ctrl">
+        <button onclick="adjQty(${item.ID},-1)">−</button>
+        <span style="min-width:28px;text-align:center;font-weight:500">${item.Quantity||0}</span>
+        <button onclick="adjQty(${item.ID},1)">+</button>
+      </div></td>
+      <td>${statusPill(item)}</td>
+      <td>${item.SupplierName?`<span style="font-size:12px">${esc(item.SupplierName)}</span>${item.SupplierEmail?`<br><span style="font-size:11px;color:var(--text-faint)">${esc(item.SupplierEmail)}</span>`:''}':'<span style="color:var(--text-faint);font-size:12px">—</span>'}</td>
+      <td>${item.LowStockAt||globalLow}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="removeItem(${item.ID},'${esc(item.ItemName||'')}')">✕</button></td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+async function addItem() {
+  const bc=document.getElementById('new-barcode').value.trim();
+  const name=document.getElementById('new-name').value.trim();
+  if(!bc||!name){alert('Barcode and name are required');return;}
+  if(inventoryCache.find(i=>i.Barcode===bc)){alert('Barcode already exists');return;}
+  try {
+    await callFlow('add-item',{
+      barcode:bc, itemName:name,
+      quantity:parseInt(document.getElementById('new-qty').value)||0,
+      lowStockAt:parseInt(document.getElementById('new-low').value)||globalLow,
+      supplierName:document.getElementById('new-sup-name').value.trim(),
+      supplierEmail:document.getElementById('new-sup-email').value.trim(),
+      reorderQty:parseInt(document.getElementById('new-reorder').value)||20,
+      nfcTagId:document.getElementById('new-nfc-id').value.trim(),
+      emailTemplate:document.getElementById('new-email-tmpl').value.trim()
+    });
+    ['new-barcode','new-name','new-sup-name','new-sup-email','new-nfc-id','new-email-tmpl'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('new-qty').value='0'; document.getElementById('new-reorder').value='20';
+    await loadInventory();
+  } catch(e){alert('Error: '+e.message);}
+}
+
+async function adjQty(id, delta) {
+  const item=inventoryCache.find(i=>i.ID===id); if(!item)return;
+  const newQty=Math.max(0,(item.Quantity||0)+delta);
+  try {
+    await callFlow('scan',{ itemId:id, newQty, action:delta>0?'in':'out', description:`Manual adj: ${item.ItemName} → qty ${newQty}`, userName:currentUser, barcode:item.Barcode||'', quantity:Math.abs(delta) });
+    await loadInventory();
+  } catch(e){alert('Error: '+e.message);}
+}
+
+async function removeItem(id,name) {
+  if(!confirm('Remove '+name+'?'))return;
+  // Note: deletion requires a separate flow or SharePoint admin — for now just refresh
+  alert('To delete items, please remove them directly from the InventoryItems SharePoint list.');
+}
+
+// ─── Scan ─────────────────────────────────────────────────────────────────────
 function doScan()    { processScan(document.getElementById('scan-input').value.trim(),    parseInt(document.getElementById('scan-qty').value)||1,    'usb'); }
 function doScanCam() { processScan(document.getElementById('scan-input-cam').value.trim(), parseInt(document.getElementById('scan-qty-cam').value)||1, 'camera'); }
 
 async function processScan(bc, qty, method) {
-  if (!bc) { setFeedback('No barcode received — try again', 'warn'); return; }
+  if (!bc) { setFeedback('No barcode — try again','warn'); return; }
+  if (!FLOWS['scan']) { setFeedback('Flow 2 (scan) URL not set — go to Settings','err'); return; }
 
-  // Try to match by Barcode OR NFCTagId
-  let item;
-  try {
-    const byBarcode = await spGet(`/_api/web/lists/getbytitle('InventoryItems')/items?${SP_SELECT}&$filter=Barcode eq '${encodeURIComponent(bc)}'`);
-    item = byBarcode.d.results[0];
-    if (!item) {
-      // Try NFCTagId match (for Scannable-style serial IDs)
-      const byNFC = await spGet(`/_api/web/lists/getbytitle('InventoryItems')/items?${SP_SELECT}&$filter=NFCTagId eq '${encodeURIComponent(bc)}'`);
-      item = byNFC.d.results[0];
-    }
-  } catch(e) { setFeedback('SharePoint error: '+e.message, 'err'); return; }
+  // Find item in cache first (by Barcode or NFCTagId)
+  let item = inventoryCache.find(i=>i.Barcode===bc) || inventoryCache.find(i=>i.NFCTagId===bc);
 
+  // If not in cache, reload inventory and try again
   if (!item) {
-    setFeedback(`"${bc}" not found — add it in Inventory first`, 'err');
-    if (inputMethod==='usb') { document.getElementById('scan-input').value=''; document.getElementById('scan-input').focus(); }
-    if (inputMethod==='camera') document.getElementById('scan-input-cam').value='';
-    return;
+    setFeedback('Looking up item…','warn');
+    await loadInventory();
+    item = inventoryCache.find(i=>i.Barcode===bc) || inventoryCache.find(i=>i.NFCTagId===bc);
   }
+
+  if (!item) { setFeedback(`"${bc}" not found — add it in Inventory first`,'err'); clearScanInputs(); return; }
 
   const prevQty = item.Quantity||0;
   let newQty;
-  if (scanMode==='in') { newQty = prevQty+qty; }
-  else {
-    if (prevQty<qty) { setFeedback(`Only ${prevQty} in stock — can't remove ${qty}`, 'err'); return; }
-    newQty = prevQty-qty;
-  }
+  if (scanMode==='in') { newQty=prevQty+qty; }
+  else { if(prevQty<qty){setFeedback(`Only ${prevQty} in stock — can't remove ${qty}`,'err');return;} newQty=prevQty-qty; }
+
+  const methodLabel = method==='nfc'?'NFC':method==='camera'?'camera':'USB';
+  const desc = `Scanned ${scanMode} ×${qty} via ${methodLabel} — ${item.ItemName} (${item.Barcode||bc}) → qty: ${newQty}`;
 
   try {
-    await spPatch(`/_api/web/lists/getbytitle('InventoryItems')/items(${item.ID})`, { '__metadata':{'type':'SP.Data.InventoryItemsListItem'},Quantity:newQty });
-    const verb = scanMode==='in'?'in':'out';
-    const methodLabel = method==='nfc'?'NFC':method==='camera'?'camera':'USB';
-    const desc = `Scanned ${verb} ×${qty} via ${methodLabel} — ${item.ItemName} (${item.Barcode}) → qty: ${newQty}`;
-    await addLog(verb, desc, item.Barcode, qty);
-    postToTeams(scanMode==='in'
-      ? `📥 **Scan in** [${methodLabel}] — ${item.ItemName}\nBarcode: \`${item.Barcode}\` | +${qty} | New qty: **${newQty}**`
-      : `📤 **Scan out** [${methodLabel}] — ${item.ItemName}\nBarcode: \`${item.Barcode}\` | −${qty} | New qty: **${newQty}**`);
+    await callFlow('scan',{ itemId:item.ID, newQty, action:scanMode, description:desc, userName:currentUser, barcode:item.Barcode||bc, quantity:qty });
 
     const thresh = item.LowStockAt||globalLow;
-    if (newQty===0 && scanMode==='out') {
-      await addLog('alert',`OUT OF STOCK — ${item.ItemName} (${item.Barcode})`,item.Barcode,0);
-      postToTeams(`🚨 **OUT OF STOCK** — ${item.ItemName} | \`${item.Barcode}\``);
-      if (item.SupplierEmail) triggerSupplierEmail(item, newQty);
-    } else if (scanMode==='out' && newQty<=thresh) {
-      await addLog('alert',`Low stock — ${item.ItemName} (${item.Barcode}), only ${newQty} left`,item.Barcode,newQty);
-      postToTeams(`⚠️ **LOW STOCK** — ${item.ItemName} | Remaining: **${newQty}** (threshold: ${thresh})`);
-      if (item.SupplierEmail) triggerSupplierEmail(item, newQty);
+    const isOut  = newQty===0 && scanMode==='out';
+    const isLow  = scanMode==='out' && newQty<=thresh && newQty>0;
+
+    // Notify flow handles both Teams message and supplier email
+    if (FLOWS['notify']) {
+      const teamsMsg = scanMode==='in'
+        ? `📥 Scan in [${methodLabel}] — ${item.ItemName} | +${qty} | New qty: ${newQty}`
+        : `📤 Scan out [${methodLabel}] — ${item.ItemName} | −${qty} | New qty: ${newQty}`;
+      const sendEmail = (isOut||isLow) && !!item.SupplierEmail;
+      const emailBody = sendEmail ? buildEmailBody(item,newQty) : '';
+      callFlow('notify',{ teamsMessage:teamsMsg+(isOut?'\n🚨 OUT OF STOCK':isLow?`\n⚠️ LOW STOCK — only ${newQty} left`:''), sendEmail, supplierEmail:item.SupplierEmail||'', supplierName:item.SupplierName||'', itemName:item.ItemName||'', emailBody });
     }
 
-    setFeedback(`✓ ${item.ItemName}: ${scanMode==='in'?'+':'−'}${qty} (now ${newQty})`, 'ok');
-    recentScans.unshift({ type:scanMode, method, text:desc, time:now() });
+    setFeedback(`✓ ${item.ItemName}: ${scanMode==='in'?'+':'−'}${qty} (now ${newQty})`,'ok');
+    recentScans.unshift({type:scanMode,method,text:desc,time:now()});
     renderRecentScans();
-    const cached = inventoryCache.find(i => i.ID===item.ID);
-    if (cached) cached.Quantity = newQty;
+    const cached=inventoryCache.find(i=>i.ID===item.ID); if(cached)cached.Quantity=newQty;
     updateStats(inventoryCache);
-  } catch(e) { setFeedback('Error saving: '+e.message, 'err'); return; }
+  } catch(e){setFeedback('Error: '+e.message,'err');return;}
 
-  if (inputMethod==='usb')    { document.getElementById('scan-input').value='';     document.getElementById('scan-qty').value='1';     document.getElementById('scan-input').focus(); }
-  if (inputMethod==='camera') { document.getElementById('scan-input-cam').value=''; document.getElementById('scan-qty-cam').value='1'; }
+  clearScanInputs();
 }
 
-function setFeedback(msg, type) {
-  const el = document.getElementById('scan-feedback');
-  el.textContent = msg;
-  el.className = type==='ok'?'fb-ok':type==='warn'?'fb-warn':'fb-err';
+function clearScanInputs() {
+  document.getElementById('scan-input').value=''; document.getElementById('scan-qty').value='1';
+  document.getElementById('scan-input-cam').value=''; document.getElementById('scan-qty-cam').value='1';
+  if(inputMethod==='usb') document.getElementById('scan-input').focus();
 }
+
+function buildEmailBody(item,currentQty) {
+  const tpl = item.EmailTemplate || 'Hi {supplier_name},\n\nWe would like to reorder {reorder_qty} units of {item_name} (SKU: {barcode}).\n\nCurrent stock: {current_qty} units.\n\nPlease confirm availability and estimated delivery.\n\nKind regards,\n{sent_by}';
+  return tpl.replace(/{item_name}/g,item.ItemName||'').replace(/{barcode}/g,item.Barcode||'').replace(/{supplier_name}/g,item.SupplierName||'supplier').replace(/{current_qty}/g,currentQty).replace(/{reorder_qty}/g,item.ReorderQty||globalLow*4).replace(/{sent_by}/g,currentUser);
+}
+
+function setFeedback(msg,type) { const el=document.getElementById('scan-feedback'); el.textContent=msg; el.className=type==='ok'?'fb-ok':type==='warn'?'fb-warn':'fb-err'; }
 
 function renderRecentScans() {
-  const el = document.getElementById('recent-scans');
-  if (!recentScans.length) { el.innerHTML='<div class="empty">No scans this session yet</div>'; return; }
-  const icons = { usb:'⌨', camera:'📷', nfc:'📡' };
-  el.innerHTML = recentScans.slice(0,8).map(e => `
+  const el=document.getElementById('recent-scans');
+  if(!recentScans.length){el.innerHTML='<div class="empty">No scans this session yet</div>';return;}
+  const icons={usb:'⌨',camera:'📷',nfc:'📡'};
+  el.innerHTML=recentScans.slice(0,8).map(e=>`
     <div class="log-entry">
       <div class="log-icon ${e.type}">${e.type==='in'?'↓':'↑'}</div>
       <div class="log-text">${esc(e.text)} <span style="font-size:11px;color:var(--text-faint)">${icons[e.method]||''}</span></div>
@@ -1053,103 +953,74 @@ function renderRecentScans() {
     </div>`).join('');
 }
 
-// ─── Supplier email ───────────────────────────────────────────────────────────
-function buildEmailBody(item, currentQty) {
-  const tpl = item.EmailTemplate || 'Hi {supplier_name},\n\nWe would like to reorder {reorder_qty} units of {item_name} (SKU: {barcode}).\n\nOur current stock has dropped to {current_qty} units and requires restocking.\n\nPlease confirm availability and provide an estimated delivery date.\n\nKind regards,\n{sent_by}';
-  return tpl
-    .replace(/{item_name}/g,     item.ItemName    || '')
-    .replace(/{barcode}/g,       item.Barcode     || '')
-    .replace(/{supplier_name}/g, item.SupplierName|| 'supplier')
-    .replace(/{current_qty}/g,   currentQty)
-    .replace(/{reorder_qty}/g,   item.ReorderQty  || globalLow*4)
-    .replace(/{sent_by}/g,       currentUser      || 'Inventory system');
-}
-
-async function triggerSupplierEmail(item, currentQty) {
-  if (!paUrl) return;
-  const body = buildEmailBody(item, currentQty);
-  try {
-    const r = await fetch(paUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ supplierEmail:item.SupplierEmail, supplierName:item.SupplierName||'', itemName:item.ItemName||'', barcode:item.Barcode||'', currentQty, reorderQty:item.ReorderQty||globalLow*4, emailBody:body, sentBy:currentUser||'Inventory system' }) });
-    const ok = r.ok||r.status===202;
-    await addLog('email',`Supplier email ${ok?'sent':'FAILED'} to ${item.SupplierEmail} for ${item.ItemName}`,item.Barcode,currentQty);
-  } catch(e) { await addLog('email',`Email error: ${e.message} (${item.ItemName})`,item.Barcode,currentQty); }
-}
-
 // ─── Log ──────────────────────────────────────────────────────────────────────
-async function addLog(action, desc, barcode, quantity) {
-  try { await spPost("/_api/web/lists/getbytitle('InventoryLog')/items", { '__metadata':{'type':'SP.Data.InventoryLogListItem'},Action:action,Description:desc,UserName:currentUser||'Unknown',Barcode:barcode||'',Quantity:quantity||0 }); }
-  catch(e) { console.warn('Log write failed:', e); }
-}
-
 async function loadLog() {
-  const el = document.getElementById('log-container');
-  el.innerHTML = '<div class="loading-row"><div class="spinner"></div> Loading…</div>';
+  const el=document.getElementById('log-container');
+  el.innerHTML='<div class="loading-row"><div class="spinner"></div> Loading…</div>';
+  if(!FLOWS['get-log']){el.innerHTML='<div class="empty">Flow 4 URL not set — go to Settings</div>';return;}
   try {
-    const data = await spGet("/_api/web/lists/getbytitle('InventoryLog')/items?$select=ID,Action,Description,UserName,Created&$top=200&$orderby=Created desc");
-    const entries = data.d.results;
-    if (!entries.length) { el.innerHTML='<div class="empty">No activity yet</div>'; return; }
-    const icons = { in:'↓', out:'↑', alert:'!', email:'@', add:'+', nfc:'📡' };
-    el.innerHTML = entries.map(e => `
+    const data=await callFlow('get-log',{});
+    const entries=data.value||[];
+    if(!entries.length){el.innerHTML='<div class="empty">No activity yet</div>';return;}
+    const icons={in:'↓',out:'↑',alert:'!',email:'@',add:'+'};
+    el.innerHTML=entries.map(e=>`
       <div class="log-entry">
         <div class="log-icon ${e.Action||'add'}">${icons[e.Action]||'+'}</div>
         <div class="log-text">${esc(e.Description||'')}
-          <div class="log-meta">${esc(e.UserName||'')} &nbsp;·&nbsp; <span class="pill pill-blue" style="font-size:10px">${e.Action||''}</span></div>
+          <div class="log-meta">${esc(e.UserName||'')} · <span class="pill pill-blue" style="font-size:10px">${e.Action||''}</span></div>
         </div>
         <div class="log-time">${fmtDate(e.Created)}</div>
       </div>`).join('');
-  } catch(e) { el.innerHTML='<div class="empty">Could not load log.<br><small>'+e.message+'</small></div>'; }
+  } catch(e){el.innerHTML='<div class="empty">Could not load log.<br><small>'+e.message+'</small></div>';}
 }
 
-// ─── Teams ────────────────────────────────────────────────────────────────────
-async function postToTeams(text) {
-  if (!webhookUrl) return;
-  try { await fetch(webhookUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ text }) }); } catch(_){}
-}
-function updateTeamsBadge() {
-  const b = document.getElementById('teams-badge');
-  b.className = 'bp'+(webhookUrl?' ok':'');
-  b.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 6.5a4 4 0 1 0-8 0 4 4 0 0 0 8 0zM14 11h-3.5A3.5 3.5 0 0 0 7 14.5V18h14v-3.5A3.5 3.5 0 0 0 17.5 11H14zM5.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 18v-3a3 3 0 0 1 3-3h.5"/></svg> Teams${webhookUrl?' ✓':''}`;
-}
-
-// ─── Settings ─────────────────────────────────────────────────────────────────
-function saveSPUrl()   { spSiteUrl=document.getElementById('sp-url').value.trim().replace(/\/$/,''); localStorage.setItem('inv_spSite',spSiteUrl); document.getElementById('sp-feedback').textContent='✓ Saved — reload to reconnect.'; }
-function saveWebhook() { webhookUrl=document.getElementById('webhook-url').value.trim(); localStorage.setItem('inv_webhook',webhookUrl); document.getElementById('webhook-feedback').textContent=webhookUrl?'✓ Saved':'Cleared'; updateTeamsBadge(); }
-function savePAUrl()   { paUrl=document.getElementById('pa-url').value.trim(); localStorage.setItem('inv_paUrl',paUrl); document.getElementById('pa-feedback').textContent=paUrl?'✓ Saved':'Cleared'; }
-function saveGlobalLow() { globalLow=parseInt(document.getElementById('global-low').value)||5; localStorage.setItem('inv_globalLow',globalLow); }
-
-async function testWebhook() {
-  if (!webhookUrl) { document.getElementById('webhook-feedback').textContent='Save a webhook URL first'; return; }
-  document.getElementById('webhook-feedback').textContent='Sending…';
-  try {
-    const r = await fetch(webhookUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ text: '✅ Inventory Scanner — Teams webhook test successful!' }) });
-    document.getElementById('webhook-feedback').textContent = r.ok ? '✓ Test sent — check your Teams channel' : 'Error: status ' + r.status;
-  } catch(e) { document.getElementById('webhook-feedback').textContent='Error: '+e.message; }
-}
-async function testPA() {
-  if (!paUrl) { document.getElementById('pa-feedback').textContent='Save the Power Automate URL first'; return; }
-  document.getElementById('pa-feedback').textContent='Sending…';
-  try {
-    const r = await fetch(paUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({supplierEmail:'test@example.com',supplierName:'Test Supplier',itemName:'Test Item',barcode:'TEST001',currentQty:2,reorderQty:20,emailBody:'This is a test from Inventory Scanner.',sentBy:currentUser||'Admin'})});
-    document.getElementById('pa-feedback').textContent = r.ok||r.status===202?'✓ Test sent':'Flow responded: '+r.status;
-  } catch(e) { document.getElementById('pa-feedback').textContent='Error: '+e.message; }
+// ─── Test flows ───────────────────────────────────────────────────────────────
+async function testAllFlows() {
+  const fb=document.getElementById('test-feedback');
+  fb.textContent='Testing…';
+  const results=[];
+  for (const key of Object.keys(FLOWS)) {
+    if (!FLOWS[key]) { results.push(`❌ Flow "${key}": URL not set`); continue; }
+    try { await callFlow(key,{}); results.push(`✅ Flow "${key}": OK`); }
+    catch(e) { results.push(`❌ Flow "${key}": ${e.message}`); }
+  }
+  fb.innerHTML=results.join('<br>');
 }
 
 // ─── Export ───────────────────────────────────────────────────────────────────
-function exportCSV() { dlCSV('inventory.csv',[['Barcode','Name','Quantity','Alert at','Supplier','Email','Reorder qty','NFC Tag ID'],...inventoryCache.map(i=>[i.Barcode,i.ItemName,i.Quantity,i.LowStockAt||globalLow,i.SupplierName||'',i.SupplierEmail||'',i.ReorderQty||'',i.NFCTagId||''])]); }
-async function exportLog() {
-  try { const data=await spGet("/_api/web/lists/getbytitle('InventoryLog')/items?$select=Action,Description,UserName,Created&$top=1000&$orderby=Created desc"); dlCSV('activity_log.csv',[['Time','Action','User','Description'],...data.d.results.map(e=>[e.Created,e.Action,e.UserName,e.Description])]); }
-  catch(e) { alert('Export failed: '+e.message); }
+function exportCSV() {
+  dlCSV('inventory.csv',[['Barcode','Name','Quantity','Alert at','Supplier','Email','Reorder qty','NFC Tag ID'],...inventoryCache.map(i=>[i.Barcode,i.ItemName,i.Quantity,i.LowStockAt||globalLow,i.SupplierName||'',i.SupplierEmail||'',i.ReorderQty||'',i.NFCTagId||''])]);
 }
-function dlCSV(filename,rows) { const csv=rows.map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n'); const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv); a.download=filename; a.click(); }
+function dlCSV(filename,rows){const csv=rows.map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download=filename;a.click();}
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function now()  { return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
-function fmtDate(iso) { if(!iso)return''; const d=new Date(iso); return d.toLocaleDateString([],{day:'numeric',month:'short'})+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function now(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+function fmtDate(iso){if(!iso)return'';const d=new Date(iso);return d.toLocaleDateString([],{day:'numeric',month:'short'})+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
 
-document.getElementById('scan-input').addEventListener('keydown', e => { if(e.key==='Enter') doScan(); });
-document.getElementById('scan-input-cam').addEventListener('keydown', e => { if(e.key==='Enter') doScanCam(); });
-detectAuth();
+// ─── Boot ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('scan-input').addEventListener('keydown',e=>{if(e.key==='Enter')doScan();});
+  document.getElementById('scan-input-cam').addEventListener('keydown',e=>{if(e.key==='Enter')doScanCam();});
+
+  // Wire up overlay button
+  document.getElementById('overlay-settings-btn').addEventListener('click',()=>{
+    document.getElementById('setup-overlay').style.display='none';
+    showTab('settings');
+  });
+
+  // Wire up nav buttons
+  document.querySelectorAll('.nav-btn[id^="nav-"]').forEach(btn=>{
+    const tab = btn.id.replace('nav-','');
+    btn.addEventListener('click',()=>showTab(tab));
+  });
+
+  loadConfig();
+  initNFCButton();
+  const hasFlows = Object.values(FLOWS).some(v=>v);
+  if (!hasFlows) { document.getElementById('setup-overlay').style.display='flex'; }
+  else { loadInventory(); }
+});
 </script>
 </body>
 </html>
