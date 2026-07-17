@@ -258,26 +258,26 @@
   <nav class="sidebar">
     <div class="nav-section">
       <div class="nav-label">Scanner</div>
-      <button class="nav-btn active" id="nav-scan" id="nav-scan">
+      <button class="nav-btn active" id="nav-scan">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
         Scan
       </button>
-      <button class="nav-btn" id="nav-inventory" id="nav-inventory">
+      <button class="nav-btn" id="nav-inventory">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
         Inventory
       </button>
-      <button class="nav-btn" id="nav-log" id="nav-log">
+      <button class="nav-btn" id="nav-log">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Activity log
       </button>
     </div>
     <div class="nav-section" style="margin-top:8px">
       <div class="nav-label">Admin</div>
-      <button class="nav-btn" id="nav-settings" id="nav-settings">
+      <button class="nav-btn" id="nav-settings">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Settings
       </button>
-      <button class="nav-btn" id="nav-setup" id="nav-setup">
+      <button class="nav-btn" id="nav-setup">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         Setup guide
       </button>
@@ -394,7 +394,7 @@
     <div id="pane-settings" style="display:none">
       <div class="card">
         <div class="card-title">Power Automate flow URLs</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">This app communicates with SharePoint entirely through Power Automate flows. Paste each flow's HTTP trigger URL below. See the <button id="nav-setup" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px;padding:0">Setup guide</button> for how to create each flow.</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">This app communicates with SharePoint entirely through Power Automate flows. Paste each flow's HTTP trigger URL below. See the <button id="settings-setup-link" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px;padding:0">Setup guide</button> for how to create each flow.</p>
 
         <div class="flow-card">
           <div class="flow-card-title">1 — Get inventory</div>
@@ -1008,6 +1008,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('setup-overlay').style.display='none';
     showTab('settings');
   });
+
+  // Wire up settings page setup link
+  document.getElementById('settings-setup-link').addEventListener('click',()=>showTab('setup'));
 
   // Wire up nav buttons
   document.querySelectorAll('.nav-btn[id^="nav-"]').forEach(btn=>{
