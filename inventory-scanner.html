@@ -697,11 +697,12 @@ function doActualScan(item, bc, qty, method) {
       var thresh = item.LowStockAt||globalLow;
       var isOut = newQty===0 && scanMode==='out';
       var isLow = scanMode==='out' && newQty<=thresh && newQty>0;
-      if (FLOWS['notify']) {
-        var msg = (scanMode==='in'?'📥 Scan in':'📤 Scan out')+' ['+methodLabel+'] — '+item.ItemName+' | '+(scanMode==='in'?'+':'-')+qty+' | New qty: '+newQty;
-        if (isOut) msg += '\n🚨 OUT OF STOCK';
-        else if (isLow) msg += '\n⚠️ LOW STOCK — only '+newQty+' left';
-        var sendEmail = (isOut||isLow) && !!item.SupplierEmail;
+      // Only notify Teams for low stock or out of stock events — not every scan
+      if (FLOWS['notify'] && (isOut || isLow)) {
+        var msg = isOut
+          ? '🚨 OUT OF STOCK — ' + item.ItemName + ' (' + (item.Barcode||bc) + ')\nScanned out by: ' + currentUser
+          : '⚠️ LOW STOCK — ' + item.ItemName + ' (' + (item.Barcode||bc) + ')\nOnly ' + newQty + ' remaining (threshold: ' + (item.LowStockAt||globalLow) + ')\nScanned out by: ' + currentUser;
+        var sendEmail = !!(isOut||isLow) && !!item.SupplierEmail;
         callFlow('notify',{ teamsMessage:msg, sendEmail:sendEmail, supplierEmail:item.SupplierEmail||'', supplierName:item.SupplierName||'', itemName:item.ItemName||'', emailBody:sendEmail?buildEmailBody(item,newQty):'' });
       }
       setFeedback('✓ '+item.ItemName+': '+(scanMode==='in'?'+':'-')+qty+' (now '+newQty+')','ok');
