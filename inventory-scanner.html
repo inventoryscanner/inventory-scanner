@@ -575,13 +575,30 @@ function setMethod(m) {
 }
 
 // ── Inventory ────────────────────────────────────────────────────────────────
+// SharePoint returns Barcode as "Title" since it was renamed from the default Title column
+// This function normalises the field names so the app works correctly
+function normaliseItem(item) {
+  return {
+    ID:           item.ID           || item.Id || 0,
+    Barcode:      item.Barcode      || item.Title || '',
+    ItemName:     item.ItemName     || '',
+    Quantity:     item.Quantity     || 0,
+    LowStockAt:   item.LowStockAt   || 0,
+    SupplierName: item.SupplierName || '',
+    SupplierEmail:item.SupplierEmail|| '',
+    ReorderQty:   item.ReorderQty   || 0,
+    EmailTemplate:item.EmailTemplate|| '',
+    NFCTagId:     item.NFCTagId     || ''
+  };
+}
+
 function loadInventory() {
   var wrap = document.getElementById('inv-table-wrap');
   wrap.innerHTML = '<div class="loading-row"><div class="spinner"></div> Loading…</div>';
   if (!FLOWS['get-inv']) { wrap.innerHTML = '<div class="empty">Flow 1 URL not set — go to Settings</div>'; return; }
   callFlow('get-inv', {})
     .then(function(data) {
-      inventoryCache = data.value || [];
+      inventoryCache = (data.value || []).map(normaliseItem);
       updateStats(inventoryCache);
       renderInvTable(inventoryCache);
     })
