@@ -668,7 +668,8 @@ function setMethod(m) {
   var hint = document.getElementById('method-hint');
   hint.className = 'method-hint' + (h.cls ? ' ' + h.cls : '');
   hint.textContent = h.text;
-  document.getElementById('usb-area').style.display = m === 'usb' ? '' : 'none';
+  var usbArea=document.getElementById('scan-input') ? document.getElementById('scan-input').closest('.scan-area') : null;
+  if(usbArea) usbArea.style.display = m === 'usb' ? '' : 'none';
   document.getElementById('camera-area').style.display = m === 'camera' ? '' : 'none';
   document.getElementById('nfc-area').style.display = m === 'nfc' ? '' : 'none';
   if (m === 'usb') setTimeout(function(){ document.getElementById('scan-input').focus(); }, 60);
