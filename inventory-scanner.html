@@ -531,11 +531,13 @@ function loadConfigFromSharePoint() {
       for (var i = 0; i < items.length; i++) {
         var key = (items[i].Title || '').trim();
         var val = (items[i].Value || items[i].value || '').trim();
-        console.log('Config item:', key, val ? val.substring(0,50)+'...' : 'EMPTY');
-        if (key && val && FLOWS.hasOwnProperty(key)) {
-          FLOWS[key] = val;
-          localStorage.setItem('inv_flow_' + key, val);
-          var el = document.getElementById('flow-' + key);
+        // Strip 'flow-' prefix to match FLOWS object keys
+        var flowKey = key.replace(/^flow-/, '');
+        console.log('Config item:', key, '->', flowKey, val ? val.substring(0,50)+'...' : 'EMPTY');
+        if (flowKey && val && FLOWS.hasOwnProperty(flowKey)) {
+          FLOWS[flowKey] = val;
+          localStorage.setItem('inv_flow_' + flowKey, val);
+          var el = document.getElementById('flow-' + flowKey);
           if (el) el.value = val;
         }
       }
