@@ -527,9 +527,11 @@ function loadConfigFromSharePoint() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var items = data.value || [];
+      console.log('Config items loaded:', items.length, items);
       for (var i = 0; i < items.length; i++) {
         var key = items[i].Title;
-        var val = items[i].Value || '';
+        var val = items[i].Value || items[i].value || '';
+        console.log('Config item:', key, val ? val.substring(0,50)+'...' : 'EMPTY');
         if (key && val && FLOWS.hasOwnProperty(key)) {
           FLOWS[key] = val;
           localStorage.setItem('inv_flow_' + key, val);
@@ -538,7 +540,6 @@ function loadConfigFromSharePoint() {
         }
       }
       updateTeamsBadge();
-      // If we now have flows, load inventory
       var hasFlows = Object.keys(FLOWS).some(function(k){ return !!FLOWS[k]; });
       if (hasFlows) {
         var invWrap = document.getElementById('inv-table-wrap');
