@@ -542,8 +542,7 @@ function loadConfigFromSharePoint() {
       updateTeamsBadge();
       var hasFlows = Object.keys(FLOWS).some(function(k){ return !!FLOWS[k]; });
       if (hasFlows) {
-        var invWrap = document.getElementById('inv-table-wrap');
-        if (invWrap) loadInventory();
+        loadInventory();
       }
     })
     .catch(function(e) { console.warn('Could not load config from SharePoint:', e); });
@@ -559,7 +558,7 @@ function saveFlow(k) {
 
 function updateTeamsBadge() {
   var b = document.getElementById('teams-badge');
-  var connected = FLOWS['notify'] && FLOWS['get-inv'] && FLOWS['scan'];
+  var connected = !!(FLOWS['notify'] && FLOWS['get-inv'] && FLOWS['scan']);
   b.className = 'bp' + (connected ? ' ok' : '');
   b.textContent = connected ? 'Flows connected ✓' : 'Flows not set up';
 }
