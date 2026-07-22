@@ -169,6 +169,8 @@
     .form-grid.fg4 { grid-template-columns: 1fr 1fr; }
     .content { padding: 14px; padding-bottom: 80px; }
     .bottom-nav { display: flex; }
+    /* Single column form on mobile */
+    .form-grid.fg4, .form-grid.fg2 { grid-template-columns: 1fr; }
     /* Make method buttons bigger on mobile */
     .method-btn { padding: 8px 14px; font-size: 13px; }
     /* Make camera open button more prominent on mobile */
@@ -670,6 +672,10 @@ function setMethod(m) {
   document.getElementById('camera-area').style.display = m === 'camera' ? '' : 'none';
   document.getElementById('nfc-area').style.display = m === 'nfc' ? '' : 'none';
   if (m === 'usb') setTimeout(function(){ document.getElementById('scan-input').focus(); }, 60);
+  // On mobile, auto-open camera when camera method is selected
+  if (m === 'camera' && window.innerWidth <= 640) { setTimeout(openCamera, 200); }
+  // On mobile, auto-open NFC when NFC method is selected
+  if (m === 'nfc' && window.innerWidth <= 640) { setTimeout(openNFC, 200); }
 }
 
 // ── Inventory ────────────────────────────────────────────────────────────────
