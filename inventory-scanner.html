@@ -234,7 +234,11 @@
           <button class="method-btn nfc-btn disabled" id="mbtn-nfc">📡 NFC Tap <span class="method-tag" id="nfc-tag">checking…</span></button>
         </div>
         <div class="method-hint" id="method-hint">⌨ Focus the field below, then scan with your USB or Bluetooth barcode scanner.</div>
-        <div id="usb-area">
+        <!-- Destination field — shown only on scan out -->
+        <div id="destination-area" style="display:none;margin-bottom:14px">
+          <label for="scan-destination">Issued to (truck / station)</label>
+          <input type="text" id="scan-destination" placeholder="e.g. Truck 4, Nelson Station, Training…" autocomplete="off" />
+        </div>
           <div class="scan-area">
             <div class="scan-field"><label for="scan-input">Barcode / SKU</label><input type="text" id="scan-input" placeholder="Waiting for scan…" autocomplete="off" autocorrect="off" spellcheck="false" /></div>
             <div class="qty-field"><label for="scan-qty">Qty</label><input type="number" id="scan-qty" value="1" min="1" /></div>
@@ -594,6 +598,8 @@ function setMode(m) {
   scanMode = m;
   document.getElementById('mode-in').className = 'mode-btn in' + (m === 'in' ? ' active' : '');
   document.getElementById('mode-out').className = 'mode-btn out' + (m === 'out' ? ' active' : '');
+  document.getElementById('destination-area').style.display = m === 'out' ? '' : 'none';
+  if (m === 'in') document.getElementById('scan-destination').value = '';
   if (inputMethod === 'usb') document.getElementById('scan-input').focus();
 }
 
@@ -739,7 +745,9 @@ function doActualScan(item, bc, qty, method) {
   if (scanMode==='in') { newQty = prevQty+qty; }
   else { if (prevQty<qty) { setFeedback('Only '+prevQty+' in stock — can\'t remove '+qty,'err'); return; } newQty = prevQty-qty; }
   var methodLabel = method==='nfc'?'NFC':method==='camera'?'camera':'USB';
+  var destination = document.getElementById('scan-destination').value.trim();
   var desc = 'Scanned '+scanMode+' x'+qty+' via '+methodLabel+' — '+item.ItemName+' ('+item.Barcode+') → qty: '+newQty;
+  if (scanMode === 'out' && destination) desc += ' | Issued to: ' + destination;
   callFlow('scan', { itemId:item.ID, newQty:newQty, action:scanMode, description:desc, userName:currentUser, barcode:item.Barcode||bc, quantity:qty })
     .then(function(){
       var thresh = item.LowStockAt||globalLow;
@@ -747,9 +755,10 @@ function doActualScan(item, bc, qty, method) {
       var isLow = scanMode==='out' && newQty<=thresh && newQty>0;
       // Only notify Teams for low stock or out of stock events — not every scan
       if (FLOWS['notify'] && (isOut || isLow)) {
+        var destination = document.getElementById('scan-destination').value.trim();
         var msg = isOut
-          ? '🚨 OUT OF STOCK — ' + item.ItemName + ' (' + (item.Barcode||bc) + ')\nScanned out by: ' + currentUser
-          : '⚠️ LOW STOCK — ' + item.ItemName + ' (' + (item.Barcode||bc) + ')\nOnly ' + newQty + ' remaining (threshold: ' + (item.LowStockAt||globalLow) + ')\nScanned out by: ' + currentUser;
+          ? '🚨 OUT OF STOCK — ' + item.ItemName + ' (' + (item.Barcode||bc) + ')\nScanned out by: ' + currentUser + (destination ? '\nIssued to: ' + destination : '')
+          : '⚠️ LOW STOCK — ' + item.ItemName + ' (' + (item.Barcode||bc) + ')\nOnly ' + newQty + ' remaining (threshold: ' + (item.LowStockAt||globalLow) + ')\nScanned out by: ' + currentUser + (destination ? '\nIssued to: ' + destination : '');
         var sendEmail = !!(isOut||isLow) && !!item.SupplierEmail;
         callFlow('notify',{ teamsMessage:msg, sendEmail:sendEmail, supplierEmail:item.SupplierEmail||'', supplierName:item.SupplierName||'', itemName:item.ItemName||'', emailBody:sendEmail?buildEmailBody(item,newQty):'' });
       }
@@ -767,6 +776,7 @@ function doActualScan(item, bc, qty, method) {
 function clearScanInputs() {
   document.getElementById('scan-input').value=''; document.getElementById('scan-qty').value='1';
   document.getElementById('scan-input-cam').value=''; document.getElementById('scan-qty-cam').value='1';
+  document.getElementById('scan-destination').value='';
   if (inputMethod==='usb') document.getElementById('scan-input').focus();
 }
 
