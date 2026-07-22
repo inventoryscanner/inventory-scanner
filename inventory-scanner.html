@@ -940,7 +940,16 @@ function stopNFC() { if(nfcAbort) nfcAbort.abort(); nfcAbort=null; document.getE
 // ── Camera ────────────────────────────────────────────────────────────────────
 var camStream=null; var camRAF=null; var zxingReader=null;
 
+function isSafari() {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+}
+
 function openCamera() {
+  // Safari/iOS: use native file input with camera capture — most reliable on iPhone
+  if (isSafari()) {
+    openCameraIOS();
+    return;
+  }
   document.getElementById('cam-modal').classList.add('open');
   document.getElementById('cam-feedback').textContent='Starting camera…';
   navigator.mediaDevices.enumerateDevices().then(function(devices){
@@ -951,6 +960,60 @@ function openCamera() {
     sel.onchange=function(){startCamStream(sel.value);};
     startCamStream(sel.value||undefined);
   }).catch(function(e){document.getElementById('cam-feedback').textContent='Camera error: '+e.message;});
+}
+
+function openCameraIOS() {
+  // Create a hidden file input that opens the camera
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.capture = 'environment';
+  input.style.display = 'none';
+  document.body.appendChild(input);
+  input.onchange = function() {
+    if (!input.files || !input.files[0]) { document.body.removeChild(input); return; }
+    var file = input.files[0];
+    document.body.removeChild(input);
+    setFeedback('📷 Processing image…', 'warn');
+    // Use ZXing to decode barcode from the captured image
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function() {
+      if (!window.ZXing) {
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js';
+        s.onload = function() { decodeImageZXing(img, url); };
+        document.head.appendChild(s);
+      } else {
+        decodeImageZXing(img, url);
+      }
+    };
+    img.src = url;
+  };
+  input.click();
+}
+
+function decodeImageZXing(img, url) {
+  try {
+    var reader = new window.ZXing.BrowserMultiFormatReader();
+    var canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    canvas.getContext('2d').drawImage(img, 0, 0);
+    reader.decodeFromCanvas(canvas).then(function(result) {
+      URL.revokeObjectURL(url);
+      if (result) {
+        handleCamResult(result.getText(), 'camera');
+      } else {
+        setFeedback('Could not read barcode — try again with better lighting', 'err');
+      }
+    }).catch(function() {
+      URL.revokeObjectURL(url);
+      setFeedback('Could not read barcode — try again, make sure barcode fills the frame', 'err');
+    });
+  } catch(e) {
+    setFeedback('Error: ' + e.message, 'err');
+  }
 }
 
 function startCamStream(deviceId) {
