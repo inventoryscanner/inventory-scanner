@@ -135,13 +135,6 @@
   #nfc-feedback { font-size: 13px; color: var(--teal-text); min-height: 20px; margin-bottom: 12px; }
   #nfc-modal .modal-toolbar { background: #f5f5f5; border-top: 1px solid var(--border); }
   #nfc-modal .modal-close { border-color: var(--border-strong); color: var(--text); }
-  @media (max-width: 640px) {
-    .sidebar { display: none; }
-    .stats { grid-template-columns: repeat(2,1fr); }
-    .form-grid.fg4 { grid-template-columns: 1fr 1fr; }
-    .content { padding: 14px; padding-bottom: 80px; }
-    .bottom-nav { display: flex; }
-  }
   /* Mobile bottom navigation */
   .bottom-nav {
     display: none;
@@ -169,6 +162,18 @@
   }
   .bottom-nav-btn.active { color: var(--accent); }
   .bottom-nav-btn svg { flex-shrink: 0; }
+
+  @media (max-width: 640px) {
+    .sidebar { display: none; }
+    .stats { grid-template-columns: repeat(2,1fr); }
+    .form-grid.fg4 { grid-template-columns: 1fr 1fr; }
+    .content { padding: 14px; padding-bottom: 80px; }
+    .bottom-nav { display: flex; }
+    /* Make method buttons bigger on mobile */
+    .method-btn { padding: 8px 14px; font-size: 13px; }
+    /* Make camera open button more prominent on mobile */
+    #open-camera-btn { height: 52px; font-size: 15px; }
+  }
 </style>
 </head>
 <body>
