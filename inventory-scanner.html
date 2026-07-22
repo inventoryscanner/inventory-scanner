@@ -473,7 +473,14 @@
 
 <script>
 // ── State ────────────────────────────────────────────────────────────────────
-var FLOWS = {'get-inv':null,'scan':null,'add-item':null,'get-log':null,'notify':null};
+// ── Flow URLs — loaded from SharePoint InventoryConfig, cached here ───────────
+var FLOWS = {
+  'get-inv':  'https://defaultfb3f7fa50d5841c7aa24f70b9b2220.c6.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/b892856cfce24575a3ee488de17d1830/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BUcCx87ji9a2S2pI0ETUgXNb3UDyMOPMbsKFXAn-F2w',
+  'scan':     'https://defaultfb3f7fa50d5841c7aa24f70b9b2220.c6.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/02/workflows/e2ef312a0f7d4a459354a48b87edbf03/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dArL8sWjslNQdvttE9mXuMg2UbnBK5WGRLy-P1XGJIU',
+  'add-item': 'https://defaultfb3f7fa50d5841c7aa24f70b9b2220.c6.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/08/workflows/61ea94fde1404e8a8dc542622ebb66a7/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ZWmlnVOySWP5FxSv1BNGHXnU62zlxAMA1bDNH3Oxnr0',
+  'get-log':  'https://defaultfb3f7fa50d5841c7aa24f70b9b2220.c6.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/12/workflows/63595cf398314e9bbd655e8ba901149d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=cMICtSq0MmDSC0UZa2Idp2oin4iGqsX-XE1UG4rijbE',
+  'notify':   'https://defaultfb3f7fa50d5841c7aa24f70b9b2220.c6.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/00/workflows/ca453f68182941eaa32e4ccbe7317fc8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LtmGqrwkgbp9gW5EFejpe_Z7tS4oNXFxVxdVZelUE4E'
+};
 var globalLow = 5;
 var currentUser = 'Inventory user';
 var scanMode = 'in';
