@@ -497,7 +497,17 @@ function showTab(t) {
 }
 
 // ── Config ───────────────────────────────────────────────────────────────────
+// Flow 6 is hardcoded — it reads all other flow URLs from SharePoint InventoryConfig list
+var CONFIG_FLOW_URL = 'https://defaultfb3f7fa50d5841c7aa24f70b9b2220.c6.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/21/workflows/10363bfb315d4fe299ae3bf2d9b22e36/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=JOikvOUI4opJsrqjEqQxTJW3AX8A7iB6ZmLi_bhxk6E';
+
 function loadConfig() {
+  // Load user preferences from localStorage (device-specific)
+  globalLow = parseInt(localStorage.getItem('inv_globalLow') || '5');
+  currentUser = localStorage.getItem('inv_user') || '';
+  document.getElementById('global-low').value = globalLow;
+  document.getElementById('user-name').value = currentUser;
+
+  // Try to load flow URLs from localStorage cache first (for speed)
   var keys = Object.keys(FLOWS);
   for (var i = 0; i < keys.length; i++) {
     var v = localStorage.getItem('inv_flow_' + keys[i]);
@@ -505,11 +515,37 @@ function loadConfig() {
     var el = document.getElementById('flow-' + keys[i]);
     if (el && v) el.value = v;
   }
-  globalLow = parseInt(localStorage.getItem('inv_globalLow') || '5');
-  currentUser = localStorage.getItem('inv_user') || 'Inventory user';
-  document.getElementById('global-low').value = globalLow;
-  document.getElementById('user-name').value = currentUser;
   updateTeamsBadge();
+
+  // Always fetch fresh config from SharePoint in background
+  loadConfigFromSharePoint();
+}
+
+function loadConfigFromSharePoint() {
+  if (!CONFIG_FLOW_URL || CONFIG_FLOW_URL === 'PASTE_FLOW6_URL_HERE') return;
+  fetch(CONFIG_FLOW_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({}) })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var items = data.value || [];
+      for (var i = 0; i < items.length; i++) {
+        var key = items[i].Title;
+        var val = items[i].Value || '';
+        if (key && val && FLOWS.hasOwnProperty(key)) {
+          FLOWS[key] = val;
+          localStorage.setItem('inv_flow_' + key, val);
+          var el = document.getElementById('flow-' + key);
+          if (el) el.value = val;
+        }
+      }
+      updateTeamsBadge();
+      // If we now have flows, load inventory
+      var hasFlows = Object.keys(FLOWS).some(function(k){ return !!FLOWS[k]; });
+      if (hasFlows) {
+        var invWrap = document.getElementById('inv-table-wrap');
+        if (invWrap) loadInventory();
+      }
+    })
+    .catch(function(e) { console.warn('Could not load config from SharePoint:', e); });
 }
 
 function saveFlow(k) {
@@ -924,8 +960,8 @@ window.onload = function() {
   // Load config and init
   loadConfig();
   initNFCButton();
-  var hasFlows = Object.keys(FLOWS).some(function(k){ return !!FLOWS[k]; });
-  if (!hasFlows) { showTab('settings'); } else { loadInventory(); }
+  // Always show scan tab on startup — config loads in background
+  showTab('scan');
 };
 </script>
 </body>
