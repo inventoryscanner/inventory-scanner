@@ -487,7 +487,7 @@
   "emailBody":{"type":"string"}
 }}</pre>
             <ol start="4">
-              <li>Add step: <strong>Post message in a chat or channel</strong> (Teams) → Flow bot, Channel, Team: Nelson Marlborough Equipment Group, Channel: Nelson Equipment Store Inventory, Message: dynamic <strong>teamsMessage</strong></li>
+              <li>Add step: <strong>Post message in a chat or channel</strong> (Teams) → Flow bot, Channel, Team: Nelson Marlborough Equipment Group, Channel: Inventory Alerts!, Message: dynamic <strong>teamsMessage</strong></li>
               <li>Add step: <strong>Condition</strong> → <strong>sendEmail</strong> is equal to <strong>true</strong></li>
               <li>In the Yes branch: <strong>Send an email (V2)</strong> → To: <strong>supplierEmail</strong>, Subject: <code>Reorder request</code>, Body: <strong>emailBody</strong></li>
               <li>Add step (after condition): <strong>Response</strong> → Status 200, Body: <code>{"success":true}</code>, Header: <code>Access-Control-Allow-Origin</code> = <code>*</code></li>
@@ -750,8 +750,8 @@ function addItem() {
     barcode: bc, itemName: name,
     quantity: parseInt(document.getElementById('new-qty').value)||0,
     lowStockAt: parseInt(document.getElementById('new-low').value)||globalLow,
-    supplierName: document.getElementById('new-sup-name').value.trim(),
-    supplierEmail: document.getElementById('new-sup-email').value.trim(),
+    supplierName: 'Brook Retallick',
+    supplierEmail: 'brook.retallick@fireandemergency.nz',
     reorderQty: parseInt(document.getElementById('new-reorder').value)||20,
     nfcTagId: document.getElementById('new-nfc-id').value.trim(),
     emailTemplate: document.getElementById('new-email-tmpl').value.trim()
@@ -1001,7 +1001,7 @@ function decodeImageZXing(img, url) {
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
     canvas.getContext('2d').drawImage(img, 0, 0);
-    reader.decodeFromCanvas(canvas).then(function(result) {
+    reader.decodeFromImageElement(img).then(function(result) {
       URL.revokeObjectURL(url);
       if (result) {
         handleCamResult(result.getText(), 'camera');
