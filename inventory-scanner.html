@@ -529,8 +529,8 @@ function loadConfigFromSharePoint() {
       var items = data.value || [];
       console.log('Config items loaded:', items.length, items);
       for (var i = 0; i < items.length; i++) {
-        var key = items[i].Title;
-        var val = items[i].Value || items[i].value || '';
+        var key = (items[i].Title || '').trim();
+        var val = (items[i].Value || items[i].value || '').trim();
         console.log('Config item:', key, val ? val.substring(0,50)+'...' : 'EMPTY');
         if (key && val && FLOWS.hasOwnProperty(key)) {
           FLOWS[key] = val;
@@ -539,11 +539,14 @@ function loadConfigFromSharePoint() {
           if (el) el.value = val;
         }
       }
-      updateTeamsBadge();
-      var hasFlows = Object.keys(FLOWS).some(function(k){ return !!FLOWS[k]; });
-      if (hasFlows) {
-        loadInventory();
-      }
+      // Small delay to ensure DOM is ready before updating badge
+      setTimeout(function() {
+        updateTeamsBadge();
+        var hasFlows = Object.keys(FLOWS).some(function(k){ return !!FLOWS[k]; });
+        if (hasFlows) {
+          loadInventory();
+        }
+      }, 100);
     })
     .catch(function(e) { console.warn('Could not load config from SharePoint:', e); });
 }
