@@ -982,16 +982,28 @@ function captureFrame() {
 
 function decodeCanvas(canvas) {
   try {
-    var reader = new window.ZXing.BrowserMultiFormatReader();
-    reader.decodeFromCanvas(canvas).then(function(result) {
-      if (result) {
-        handleCamResult(result.getText(), 'camera');
-      } else {
-        document.getElementById('cam-feedback').textContent = 'No barcode found — try again, hold steady';
+    // Convert canvas to image element for ZXing
+    var img = new Image();
+    img.onload = function() {
+      try {
+        var reader = new window.ZXing.BrowserMultiFormatReader();
+        var hints = new Map();
+        hints.set(window.ZXing.DecodeHintType.TRY_HARDER, true);
+        reader.hints = hints;
+        reader.decodeFromImageElement(img).then(function(result) {
+          if (result) {
+            handleCamResult(result.getText(), 'camera');
+          } else {
+            document.getElementById('cam-feedback').textContent = 'No barcode found — hold steady and try again';
+          }
+        }).catch(function() {
+          document.getElementById('cam-feedback').textContent = 'No barcode found — make sure barcode fills the frame';
+        });
+      } catch(e) {
+        document.getElementById('cam-feedback').textContent = 'Error: ' + e.message;
       }
-    }).catch(function() {
-      document.getElementById('cam-feedback').textContent = 'No barcode found — try again';
-    });
+    };
+    img.src = canvas.toDataURL('image/png');
   } catch(e) {
     document.getElementById('cam-feedback').textContent = 'Error: ' + e.message;
   }
