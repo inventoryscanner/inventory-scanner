@@ -189,6 +189,7 @@
     <div class="modal-toolbar">
       <span class="modal-fb" id="cam-feedback">Scanning…</span>
       <select id="cam-select" style="flex:1;max-width:150px;height:28px;font-size:12px;background:#222;color:#fff;border-color:#444"></select>
+      <button id="cam-capture-btn" style="display:none;background:#0078d4;border:none;color:#fff;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer">📸 Scan</button>
       <button class="modal-close" id="cam-close-btn">Cancel</button>
     </div>
   </div>
@@ -949,6 +950,8 @@ function isSafari() {
 function openCamera() {
   document.getElementById('cam-modal').classList.add('open');
   document.getElementById('cam-feedback').textContent='Starting camera…';
+  // Show tap-to-scan button on Safari since live decode doesn't work
+  document.getElementById('cam-capture-btn').style.display = isSafari() ? '' : 'none';
   navigator.mediaDevices.enumerateDevices().then(function(devices){
     var sel=document.getElementById('cam-select'); sel.innerHTML='';
     devices.filter(function(d){return d.kind==='videoinput';}).forEach(function(d){ var o=document.createElement('option'); o.value=d.deviceId; o.textContent=d.label||'Camera'; sel.appendChild(o); });
@@ -959,57 +962,38 @@ function openCamera() {
   }).catch(function(e){document.getElementById('cam-feedback').textContent='Camera error: '+e.message;});
 }
 
-function openCameraIOS() {
-  // Create a hidden file input that opens the camera
-  var input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.capture = 'environment';
-  input.style.display = 'none';
-  document.body.appendChild(input);
-  input.onchange = function() {
-    if (!input.files || !input.files[0]) { document.body.removeChild(input); return; }
-    var file = input.files[0];
-    document.body.removeChild(input);
-    setFeedback('📷 Processing image…', 'warn');
-    // Use ZXing to decode barcode from the captured image
-    var url = URL.createObjectURL(file);
-    var img = new Image();
-    img.onload = function() {
-      if (!window.ZXing) {
-        var s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js';
-        s.onload = function() { decodeImageZXing(img, url); };
-        document.head.appendChild(s);
-      } else {
-        decodeImageZXing(img, url);
-      }
-    };
-    img.src = url;
-  };
-  input.click();
+function captureFrame() {
+  // Take a snapshot of the current video frame and decode it
+  var v = document.getElementById('cam-video');
+  var canvas = document.createElement('canvas');
+  canvas.width = v.videoWidth;
+  canvas.height = v.videoHeight;
+  canvas.getContext('2d').drawImage(v, 0, 0);
+  document.getElementById('cam-feedback').textContent = 'Decoding…';
+  if (!window.ZXing) {
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js';
+    s.onload = function() { decodeCanvas(canvas); };
+    document.head.appendChild(s);
+  } else {
+    decodeCanvas(canvas);
+  }
 }
 
-function decodeImageZXing(img, url) {
+function decodeCanvas(canvas) {
   try {
     var reader = new window.ZXing.BrowserMultiFormatReader();
-    var canvas = document.createElement('canvas');
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    canvas.getContext('2d').drawImage(img, 0, 0);
     reader.decodeFromCanvas(canvas).then(function(result) {
-      URL.revokeObjectURL(url);
       if (result) {
         handleCamResult(result.getText(), 'camera');
       } else {
-        setFeedback('Could not read barcode — try again with better lighting', 'err');
+        document.getElementById('cam-feedback').textContent = 'No barcode found — try again, hold steady';
       }
     }).catch(function() {
-      URL.revokeObjectURL(url);
-      setFeedback('Could not read barcode — try again, make sure barcode fills the frame', 'err');
+      document.getElementById('cam-feedback').textContent = 'No barcode found — try again';
     });
   } catch(e) {
-    setFeedback('Error: ' + e.message, 'err');
+    document.getElementById('cam-feedback').textContent = 'Error: ' + e.message;
   }
 }
 
@@ -1072,6 +1056,7 @@ window.onload = function() {
   document.getElementById('open-nfc-btn').addEventListener('click', openNFC);
   // Camera/NFC modals
   document.getElementById('cam-close-btn').addEventListener('click', stopCamera);
+  document.getElementById('cam-capture-btn').addEventListener('click', captureFrame);
   document.getElementById('nfc-close-btn').addEventListener('click', stopNFC);
   // Inventory
   document.getElementById('add-item-btn').addEventListener('click', addItem);
