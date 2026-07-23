@@ -189,7 +189,7 @@
     <div class="modal-toolbar">
       <span class="modal-fb" id="cam-feedback">Scanning…</span>
       <select id="cam-select" style="flex:1;max-width:150px;height:28px;font-size:12px;background:#222;color:#fff;border-color:#444"></select>
-      <button id="cam-capture-btn" style="display:none;background:#0078d4;border:none;color:#fff;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer">📸 Scan</button>
+      <button id="cam-capture-btn" style="display:none;background:#0078d4;border:none;color:#fff;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;user-select:none">📸 Hold to scan</button>
       <button class="modal-close" id="cam-close-btn">Cancel</button>
     </div>
   </div>
@@ -963,7 +963,6 @@ function openCamera() {
 }
 
 function captureFrame() {
-  // Take a snapshot of the current video frame and decode it
   var v = document.getElementById('cam-video');
   var canvas = document.createElement('canvas');
   canvas.width = v.videoWidth;
@@ -978,6 +977,18 @@ function captureFrame() {
   } else {
     decodeCanvas(canvas);
   }
+}
+
+var autoScanInterval = null;
+
+function startAutoScan() {
+  document.getElementById('cam-feedback').textContent = 'Scanning — hold steady…';
+  captureFrame();
+  autoScanInterval = setInterval(captureFrame, 600);
+}
+
+function stopAutoScan() {
+  if (autoScanInterval) { clearInterval(autoScanInterval); autoScanInterval = null; }
 }
 
 function decodeCanvas(canvas) {
@@ -1030,12 +1041,14 @@ function startCamStream(deviceId) {
 
 function handleCamResult(value,method) {
   if(!value)return;
+  stopAutoScan();
   setFeedback((method==='nfc'?'📡 NFC':'📷 Camera')+' read: '+value+' — processing…','warn');
   stopCamera();
   processScan(value,1,method);
 }
 
 function stopCamera() {
+  stopAutoScan();
   if(camRAF)cancelAnimationFrame(camRAF);
   if(camStream)camStream.getTracks().forEach(function(t){t.stop();});
   if(zxingReader){try{zxingReader.reset();}catch(e){}}
@@ -1068,7 +1081,12 @@ window.onload = function() {
   document.getElementById('open-nfc-btn').addEventListener('click', openNFC);
   // Camera/NFC modals
   document.getElementById('cam-close-btn').addEventListener('click', stopCamera);
-  document.getElementById('cam-capture-btn').addEventListener('click', captureFrame);
+  var captureBtn = document.getElementById('cam-capture-btn');
+  captureBtn.addEventListener('mousedown', startAutoScan);
+  captureBtn.addEventListener('touchstart', function(e){ e.preventDefault(); startAutoScan(); });
+  captureBtn.addEventListener('mouseup', stopAutoScan);
+  captureBtn.addEventListener('touchend', stopAutoScan);
+  captureBtn.addEventListener('mouseleave', stopAutoScan);
   document.getElementById('nfc-close-btn').addEventListener('click', stopNFC);
   // Inventory
   document.getElementById('add-item-btn').addEventListener('click', addItem);
