@@ -992,9 +992,10 @@ function startCamStream(deviceId) {
 
 function handleCamResult(value,method) {
   if(!value)return;
+  var qty = method==='camera' ? (parseInt(document.getElementById('scan-qty-cam').value)||1) : 1;
   setFeedback((method==='nfc'?'📡 NFC':'📷 Camera')+' read: '+value+' — processing…','warn');
   stopCamera();
-  processScan(value,1,method);
+  processScan(value,qty,method);
 }
 
 function stopCamera() {
