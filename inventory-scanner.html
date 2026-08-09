@@ -189,7 +189,6 @@
     <div class="modal-toolbar">
       <span class="modal-fb" id="cam-feedback">Scanning…</span>
       <select id="cam-select" style="flex:1;max-width:150px;height:28px;font-size:12px;background:#222;color:#fff;border-color:#444"></select>
-      <button id="cam-capture-btn" style="display:none;background:#0078d4;border:none;color:#fff;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;user-select:none">📸 Hold to scan</button>
       <button class="modal-close" id="cam-close-btn">Cancel</button>
     </div>
   </div>
@@ -488,7 +487,7 @@
   "emailBody":{"type":"string"}
 }}</pre>
             <ol start="4">
-              <li>Add step: <strong>Post message in a chat or channel</strong> (Teams) → Flow bot, Channel, Team: Nelson Marlborough Equipment Group, Channel: Inventory Alerts, Message: dynamic <strong>teamsMessage</strong></li>
+              <li>Add step: <strong>Post message in a chat or channel</strong> (Teams) → Flow bot, Channel, Team: Nelson Marlborough Equipment Group, Channel: Inventory Alerts!, Message: dynamic <strong>teamsMessage</strong></li>
               <li>Add step: <strong>Condition</strong> → <strong>sendEmail</strong> is equal to <strong>true</strong></li>
               <li>In the Yes branch: <strong>Send an email (V2)</strong> → To: <strong>supplierEmail</strong>, Subject: <code>Reorder request</code>, Body: <strong>emailBody</strong></li>
               <li>Add step (after condition): <strong>Response</strong> → Status 200, Body: <code>{"success":true}</code>, Header: <code>Access-Control-Allow-Origin</code> = <code>*</code></li>
@@ -502,7 +501,7 @@
           <div class="step-body">
             <h3>Pin as a Teams tab</h3>
             <ol>
-              <li>In Teams, go to the Inventory Alerts channel</li>
+              <li>In Teams, go to the Nelson Equipment Store Inventory channel</li>
               <li>Click <strong>+</strong> → <strong>Apps</strong> → search <strong>Website</strong></li>
               <li>URL: <code>https://inventoryscanner.github.io/inventory-scanner/inventory-scanner.html</code></li>
               <li>Name: <strong>Inventory Scanner</strong> → Save</li>
@@ -798,7 +797,6 @@ function doActualScan(item, bc, qty, method) {
   else { if (prevQty<qty) { setFeedback('Only '+prevQty+' in stock — can\'t remove '+qty,'err'); return; } newQty = prevQty-qty; }
   var methodLabel = method==='nfc'?'NFC':method==='camera'?'camera':'USB';
   var destination = document.getElementById('scan-destination').value.trim();
-  if(scanMode==='out' && !destination){ setFeedback('Issued To is required for scan out','err'); return; }
   var desc = 'Scanned '+scanMode+' x'+qty+' via '+methodLabel+' — '+item.ItemName+' ('+item.Barcode+') → qty: '+newQty;
   if (scanMode === 'out' && destination) desc += ' | Issued to: ' + destination;
   callFlow('scan', { itemId:item.ID, newQty:newQty, action:scanMode, description:desc, userName:currentUser, barcode:item.Barcode||bc, quantity:qty })
@@ -948,10 +946,11 @@ function isSafari() {
 }
 
 function openCamera() {
+  // Live in-page video feed with automatic continuous decoding for all platforms,
+  // including iPhone Safari (falls back to ZXing continuous decode since Safari
+  // does not support the BarcodeDetector API — no manual capture needed).
   document.getElementById('cam-modal').classList.add('open');
   document.getElementById('cam-feedback').textContent='Starting camera…';
-  // Show tap-to-scan button on Safari since live decode doesn't work
-  document.getElementById('cam-capture-btn').style.display = isSafari() ? '' : 'none';
   navigator.mediaDevices.enumerateDevices().then(function(devices){
     var sel=document.getElementById('cam-select'); sel.innerHTML='';
     devices.filter(function(d){return d.kind==='videoinput';}).forEach(function(d){ var o=document.createElement('option'); o.value=d.deviceId; o.textContent=d.label||'Camera'; sel.appendChild(o); });
@@ -962,64 +961,6 @@ function openCamera() {
   }).catch(function(e){document.getElementById('cam-feedback').textContent='Camera error: '+e.message;});
 }
 
-function captureFrame() {
-  var v = document.getElementById('cam-video');
-  var canvas = document.createElement('canvas');
-  canvas.width = v.videoWidth;
-  canvas.height = v.videoHeight;
-  canvas.getContext('2d').drawImage(v, 0, 0);
-  document.getElementById('cam-feedback').textContent = 'Decoding…';
-  if (!window.ZXing) {
-    var s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js';
-    s.onload = function() { decodeCanvas(canvas); };
-    document.head.appendChild(s);
-  } else {
-    decodeCanvas(canvas);
-  }
-}
-
-var autoScanInterval = null;
-
-function startAutoScan() {
-  document.getElementById('cam-feedback').textContent = 'Scanning — hold steady…';
-  captureFrame();
-  autoScanInterval = setInterval(captureFrame, 600);
-}
-
-function stopAutoScan() {
-  if (autoScanInterval) { clearInterval(autoScanInterval); autoScanInterval = null; }
-}
-
-function decodeCanvas(canvas) {
-  try {
-    // Convert canvas to image element for ZXing
-    var img = new Image();
-    img.onload = function() {
-      try {
-        var reader = new window.ZXing.BrowserMultiFormatReader();
-        var hints = new Map();
-        hints.set(window.ZXing.DecodeHintType.TRY_HARDER, true);
-        reader.hints = hints;
-        reader.decodeFromImageElement(img).then(function(result) {
-          if (result) {
-            handleCamResult(result.getText(), 'camera');
-          } else {
-            document.getElementById('cam-feedback').textContent = 'No barcode found — hold steady and try again';
-          }
-        }).catch(function() {
-          document.getElementById('cam-feedback').textContent = 'No barcode found — make sure barcode fills the frame';
-        });
-      } catch(e) {
-        document.getElementById('cam-feedback').textContent = 'Error: ' + e.message;
-      }
-    };
-    img.src = canvas.toDataURL('image/png');
-  } catch(e) {
-    document.getElementById('cam-feedback').textContent = 'Error: ' + e.message;
-  }
-}
-
 function startCamStream(deviceId) {
   if(camStream) camStream.getTracks().forEach(function(t){t.stop();});
   var c={video:deviceId?{deviceId:{exact:deviceId}}:{facingMode:'environment'}};
@@ -1027,7 +968,7 @@ function startCamStream(deviceId) {
     camStream=stream; var v=document.getElementById('cam-video'); v.srcObject=stream; v.play();
     document.getElementById('cam-feedback').textContent='Scanning…';
     if(camRAF) cancelAnimationFrame(camRAF);
-    if(false && 'BarcodeDetector' in window) {
+    if('BarcodeDetector' in window) {
       var det=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','data_matrix','aztec','pdf417']});
       var loop=function(){ if(!document.getElementById('cam-modal').classList.contains('open'))return; det.detect(v).then(function(r){if(r.length){handleCamResult(r[0].rawValue,'camera');return;} camRAF=requestAnimationFrame(loop);}).catch(function(){camRAF=requestAnimationFrame(loop);}); };
       camRAF=requestAnimationFrame(loop);
@@ -1041,14 +982,12 @@ function startCamStream(deviceId) {
 
 function handleCamResult(value,method) {
   if(!value)return;
-  stopAutoScan();
   setFeedback((method==='nfc'?'📡 NFC':'📷 Camera')+' read: '+value+' — processing…','warn');
   stopCamera();
   processScan(value,1,method);
 }
 
 function stopCamera() {
-  stopAutoScan();
   if(camRAF)cancelAnimationFrame(camRAF);
   if(camStream)camStream.getTracks().forEach(function(t){t.stop();});
   if(zxingReader){try{zxingReader.reset();}catch(e){}}
@@ -1081,12 +1020,6 @@ window.onload = function() {
   document.getElementById('open-nfc-btn').addEventListener('click', openNFC);
   // Camera/NFC modals
   document.getElementById('cam-close-btn').addEventListener('click', stopCamera);
-  var captureBtn = document.getElementById('cam-capture-btn');
-  captureBtn.addEventListener('mousedown', startAutoScan);
-  captureBtn.addEventListener('touchstart', function(e){ e.preventDefault(); startAutoScan(); });
-  captureBtn.addEventListener('mouseup', stopAutoScan);
-  captureBtn.addEventListener('touchend', stopAutoScan);
-  captureBtn.addEventListener('mouseleave', stopAutoScan);
   document.getElementById('nfc-close-btn').addEventListener('click', stopNFC);
   // Inventory
   document.getElementById('add-item-btn').addEventListener('click', addItem);
