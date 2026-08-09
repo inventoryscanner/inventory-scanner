@@ -951,14 +951,24 @@ function openCamera() {
   // does not support the BarcodeDetector API — no manual capture needed).
   document.getElementById('cam-modal').classList.add('open');
   document.getElementById('cam-feedback').textContent='Starting camera…';
+  // Always request the back/environment camera FIRST via facingMode — this also
+  // triggers the permission prompt. Device labels (used to identify "back" vs
+  // "front" in the selector) are blank on iOS Safari until permission is granted,
+  // so enumerating devices beforehand can't reliably tell them apart and may land
+  // on the front camera. Requesting facingMode:'environment' directly sidesteps
+  // that and guarantees the back camera on the first attempt.
+  startCamStream(undefined);
+  populateCameraSelect();
+}
+
+function populateCameraSelect() {
   navigator.mediaDevices.enumerateDevices().then(function(devices){
     var sel=document.getElementById('cam-select'); sel.innerHTML='';
+    var optAuto=document.createElement('option'); optAuto.value=''; optAuto.textContent='Auto (back camera)'; sel.appendChild(optAuto);
     devices.filter(function(d){return d.kind==='videoinput';}).forEach(function(d){ var o=document.createElement('option'); o.value=d.deviceId; o.textContent=d.label||'Camera'; sel.appendChild(o); });
-    var back=devices.find(function(d){return d.kind==='videoinput'&&/back|rear|environment/i.test(d.label);});
-    if(back) sel.value=back.deviceId;
-    sel.onchange=function(){startCamStream(sel.value);};
-    startCamStream(sel.value||undefined);
-  }).catch(function(e){document.getElementById('cam-feedback').textContent='Camera error: '+e.message;});
+    sel.value='';
+    sel.onchange=function(){startCamStream(sel.value||undefined);};
+  }).catch(function(){ /* selector is a manual-override convenience; safe to skip if this fails */ });
 }
 
 function startCamStream(deviceId) {
@@ -974,8 +984,8 @@ function startCamStream(deviceId) {
       camRAF=requestAnimationFrame(loop);
     } else {
       document.getElementById('cam-feedback').textContent='Loading scanner…';
-      if(!window.ZXing){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js';s.onload=function(){if(!zxingReader)zxingReader=new window.ZXing.BrowserMultiFormatReader();document.getElementById('cam-feedback').textContent='Scanning…';zxingReader.decodeFromVideoElement(v,function(r){if(r)handleCamResult(r.getText(),'camera');});};document.head.appendChild(s);}
-      else{if(!zxingReader)zxingReader=new window.ZXing.BrowserMultiFormatReader();document.getElementById('cam-feedback').textContent='Scanning…';zxingReader.decodeFromVideoElement(v,function(r){if(r)handleCamResult(r.getText(),'camera');});}
+      if(!window.ZXing){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js';s.onload=function(){if(!zxingReader)zxingReader=new window.ZXing.BrowserMultiFormatReader();document.getElementById('cam-feedback').textContent='Scanning…';zxingReader.decodeFromVideoElementContinuously(v,function(r,err){if(r)handleCamResult(r.getText(),'camera');});};document.head.appendChild(s);}
+      else{if(!zxingReader)zxingReader=new window.ZXing.BrowserMultiFormatReader();document.getElementById('cam-feedback').textContent='Scanning…';zxingReader.decodeFromVideoElementContinuously(v,function(r,err){if(r)handleCamResult(r.getText(),'camera');});}
     }
   }).catch(function(e){document.getElementById('cam-feedback').textContent='Error: '+e.message;});
 }
