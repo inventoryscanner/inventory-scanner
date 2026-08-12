@@ -575,7 +575,7 @@ function loadConfig() {
   var keys = Object.keys(FLOWS);
   for (var i = 0; i < keys.length; i++) {
     var v = localStorage.getItem('inv_flow_' + keys[i]);
-    FLOWS[keys[i]] = v || null;
+    if (v) FLOWS[keys[i]] = v;
     var el = document.getElementById('flow-' + keys[i]);
     if (el && v) el.value = v;
   }
