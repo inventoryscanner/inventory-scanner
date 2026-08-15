@@ -57,10 +57,10 @@
   .form-grid { display: grid; gap: 10px; }
   .fg4 { grid-template-columns: 1fr 1fr 80px 90px; }
   .fg2 { grid-template-columns: 1fr 1fr; }
-  .mode-toggle { display: flex; gap: 8px; margin-bottom: 16px; }
-  .mode-btn { flex: 1; height: 38px; border-radius: var(--r); border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-muted); font-size: 13px; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; font-weight: 500; }
-  .mode-btn.active.in  { background: var(--green-bg); color: var(--green-text); border-color: #a5d6a7; }
-  .mode-btn.active.out { background: var(--amber-bg); color: var(--amber-text); border-color: #ffcc80; }
+  .mode-toggle { display: flex; gap: 10px; margin-bottom: 18px; }
+  .mode-btn { flex: 1; height: 64px; border-radius: var(--rl); border: 2px solid var(--border-strong); background: var(--surface); color: var(--text-muted); font-size: 18px; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700; }
+  .mode-btn.active.in  { background: var(--green-bg); color: var(--green-text); border-color: #66bb6a; box-shadow: 0 0 0 3px rgba(46,125,50,.12); }
+  .mode-btn.active.out { background: var(--amber-bg); color: var(--amber-text); border-color: #ffa726; box-shadow: 0 0 0 3px rgba(230,81,0,.12); }
   .method-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
   .method-btn { display: flex; align-items: center; gap: 6px; padding: 6px 13px; border-radius: 99px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-muted); font-size: 12px; font-family: inherit; cursor: pointer; font-weight: 500; }
   .method-btn.active { border-color: var(--accent); background: var(--blue-bg); color: var(--blue-text); }
@@ -179,6 +179,7 @@
     .form-grid.fg4 { grid-template-columns: 1fr 1fr; }
     .content { padding: 14px; padding-bottom: 80px; }
     .bottom-nav { display: flex; }
+    .mode-btn { height: 72px; font-size: 19px; }
     /* Single column form on mobile */
     .form-grid.fg4, .form-grid.fg2 { grid-template-columns: 1fr; }
     /* Make method buttons bigger on mobile */
