@@ -106,6 +106,16 @@
   .loading-row { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 24px; color: var(--text-muted); font-size: 13px; }
   .qty-ctrl { display: flex; align-items: center; gap: 5px; }
   .qty-ctrl button { width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .combo-wrap { position: relative; }
+  .combo-wrap input[type=text] { padding-right: 34px; }
+  .combo-toggle { position: absolute; right: 3px; top: 3px; width: 28px; height: 28px; border: none; background: none; color: var(--text-muted); cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+  .combo-toggle:hover { background: var(--bg); }
+  .combo-list { position: absolute; top: calc(100% + 4px); left: 0; right: 0; max-height: 240px; overflow-y: auto; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--r); box-shadow: 0 6px 18px rgba(0,0,0,.15); z-index: 40; display: none; }
+  .combo-list.open { display: block; }
+  .combo-option { padding: 9px 12px; font-size: 13px; cursor: pointer; }
+  .combo-option:hover, .combo-option.highlight { background: var(--blue-bg); color: var(--blue-text); }
+  .combo-option.other-opt { color: var(--text-muted); border-top: 1px solid var(--border); }
+  .combo-empty { padding: 10px 12px; font-size: 12px; color: var(--text-faint); }
   .flow-card { background: var(--blue-bg); border: 1px solid #90caf9; border-radius: var(--r); padding: 12px 14px; margin-bottom: 10px; }
   .flow-card-title { font-size: 11px; font-weight: 700; color: var(--blue-text); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
   .setup-step { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
@@ -276,12 +286,11 @@
         <div class="method-hint" id="method-hint">⌨ Focus the field below, then scan with your USB or Bluetooth barcode scanner.</div>
         <!-- Destination field — shown only on scan out -->
         <div id="destination-area" style="display:none;margin-bottom:14px">
-          <label for="scan-destination-select">Issued to (truck / station)</label>
-          <select id="scan-destination-select">
-            <option value="">Select destination…</option>
-          </select>
-          <div id="scan-destination-other-wrap" style="display:none;margin-top:8px">
-            <input type="text" id="scan-destination-other" placeholder="Type destination…" autocomplete="off" />
+          <label for="scan-destination-input">Issued to (truck / station)</label>
+          <div class="combo-wrap" id="destination-combo-wrap">
+            <input type="text" id="scan-destination-input" placeholder="Type to search, or tap ▾ to browse…" autocomplete="off" autocorrect="off" spellcheck="false" />
+            <button type="button" class="combo-toggle" id="destination-combo-toggle" aria-label="Browse all destinations">▾</button>
+            <div class="combo-list" id="destination-combo-list" role="listbox"></div>
           </div>
         </div>
           <div class="scan-area">
@@ -728,44 +737,76 @@ function loadDestinations() {
     .catch(function(e) { console.warn('Could not load destinations:', e); });
 }
 
-function populateDestinationSelect() {
-  var sel = document.getElementById('scan-destination-select');
-  if (!sel) return;
-  var current = sel.value;
-  sel.innerHTML = '<option value="">Select destination…</option>';
-  destinationsCache
-    .slice()
-    .sort(function(a,b){ return (a.Station+a.Callsign).localeCompare(b.Station+b.Callsign); })
-    .forEach(function(d) {
-      var label = (d.Station || '—') + ' — ' + (d.Callsign || '—');
-      var opt = document.createElement('option');
-      opt.value = label;
-      opt.textContent = label;
-      sel.appendChild(opt);
-    });
-  var otherOpt = document.createElement('option');
-  otherOpt.value = '__other__';
-  otherOpt.textContent = 'Other (type manually)…';
-  sel.appendChild(otherOpt);
-  if (current) sel.value = current;
+function destinationLabel(d) {
+  return (d.Station || '—') + ' — ' + (d.Callsign || '—');
 }
 
-function getDestinationValue() {
-  var sel = document.getElementById('scan-destination-select');
-  if (!sel) return '';
-  if (sel.value === '__other__') {
-    return document.getElementById('scan-destination-other').value.trim();
+var destinationFilteredList = [];
+var destinationHighlightIdx = -1;
+
+// Called after destinations load (and available for any future manual refresh).
+// Just re-renders the currently open/closed list against whatever text is in
+// the input right now, so it stays in sync once data arrives.
+function populateDestinationSelect() {
+  var input = document.getElementById('scan-destination-input');
+  renderDestinationList(input ? input.value : '');
+}
+
+function renderDestinationList(query) {
+  var list = document.getElementById('destination-combo-list');
+  if (!list) return;
+  var q = (query || '').trim().toLowerCase();
+  var sorted = destinationsCache.slice().sort(function(a,b){ return destinationLabel(a).localeCompare(destinationLabel(b)); });
+  var filtered = q ? sorted.filter(function(d){ return destinationLabel(d).toLowerCase().indexOf(q) !== -1; }) : sorted;
+  destinationFilteredList = filtered;
+  destinationHighlightIdx = -1;
+  if (!filtered.length) {
+    list.innerHTML = destinationsCache.length
+      ? '<div class="combo-empty">No match — press Enter or tap away to keep "' + esc(query) + '" as typed</div>'
+      : '<div class="combo-empty">Destinations still loading…</div>';
+    return;
   }
-  return sel.value || '';
+  list.innerHTML = filtered.map(function(d, i) {
+    return '<div class="combo-option" data-idx="' + i + '">' + esc(destinationLabel(d)) + '</div>';
+  }).join('');
+}
+
+function highlightDestinationOption() {
+  var opts = document.querySelectorAll('#destination-combo-list .combo-option');
+  for (var i = 0; i < opts.length; i++) opts[i].className = 'combo-option';
+  if (destinationHighlightIdx >= 0 && opts[destinationHighlightIdx]) {
+    opts[destinationHighlightIdx].className = 'combo-option highlight';
+    opts[destinationHighlightIdx].scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function openDestinationList() {
+  renderDestinationList(document.getElementById('scan-destination-input').value);
+  document.getElementById('destination-combo-list').className = 'combo-list open';
+}
+
+function closeDestinationList() {
+  var list = document.getElementById('destination-combo-list');
+  if (list) list.className = 'combo-list';
+}
+
+function selectDestination(label) {
+  document.getElementById('scan-destination-input').value = label;
+  closeDestinationList();
+}
+
+// Any typed text is accepted as-is — matching an exact list entry is not
+// required, so crews can still free-type a destination not yet in the list
+// (this replaces the old separate "Other" text box).
+function getDestinationValue() {
+  var input = document.getElementById('scan-destination-input');
+  return input ? input.value.trim() : '';
 }
 
 function resetDestinationField() {
-  var sel = document.getElementById('scan-destination-select');
-  if (sel) sel.value = '';
-  var other = document.getElementById('scan-destination-other');
-  if (other) other.value = '';
-  var wrap = document.getElementById('scan-destination-other-wrap');
-  if (wrap) wrap.style.display = 'none';
+  var input = document.getElementById('scan-destination-input');
+  if (input) input.value = '';
+  closeDestinationList();
 }
 
 function loadInventory() {
@@ -1100,11 +1141,50 @@ window.onload = function() {
   document.getElementById('scan-confirm-cam-btn').addEventListener('click', doScanCam);
   document.getElementById('scan-input-cam').addEventListener('keydown', function(e){ if(e.key==='Enter') doScanCam(); });
   document.getElementById('open-nfc-btn').addEventListener('click', openNFC);
-  document.getElementById('scan-destination-select').addEventListener('change', function(){
-    var isOther = this.value === '__other__';
-    document.getElementById('scan-destination-other-wrap').style.display = isOther ? '' : 'none';
-    if (isOther) document.getElementById('scan-destination-other').focus();
-  });
+  (function() {
+    var destInput = document.getElementById('scan-destination-input');
+    var destToggle = document.getElementById('destination-combo-toggle');
+    var destList = document.getElementById('destination-combo-list');
+    if (!destInput || !destToggle || !destList) return;
+    destInput.addEventListener('focus', openDestinationList);
+    destInput.addEventListener('input', function(){ openDestinationList(); });
+    destInput.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        destinationHighlightIdx = Math.min(destinationHighlightIdx + 1, destinationFilteredList.length - 1);
+        highlightDestinationOption();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        destinationHighlightIdx = Math.max(destinationHighlightIdx - 1, 0);
+        highlightDestinationOption();
+      } else if (e.key === 'Enter') {
+        if (destinationHighlightIdx >= 0 && destinationFilteredList[destinationHighlightIdx]) {
+          e.preventDefault();
+          selectDestination(destinationLabel(destinationFilteredList[destinationHighlightIdx]));
+        } else {
+          closeDestinationList();
+        }
+      } else if (e.key === 'Escape') {
+        closeDestinationList();
+      }
+    });
+    destToggle.addEventListener('click', function(){
+      if (destList.className.indexOf('open') !== -1) { closeDestinationList(); }
+      else { destInput.focus(); openDestinationList(); }
+    });
+    destList.addEventListener('mousedown', function(e){
+      var opt = e.target.closest ? e.target.closest('.combo-option') : null;
+      if (!opt) return;
+      e.preventDefault();
+      var idx = parseInt(opt.getAttribute('data-idx'), 10);
+      var d = destinationFilteredList[idx];
+      if (d) selectDestination(destinationLabel(d));
+    });
+    document.addEventListener('click', function(e){
+      var wrap = document.getElementById('destination-combo-wrap');
+      if (wrap && !wrap.contains(e.target)) closeDestinationList();
+    });
+  })();
   // Camera/NFC modals
   document.getElementById('cam-close-btn').addEventListener('click', stopCamera);
   document.getElementById('nfc-close-btn').addEventListener('click', stopNFC);
